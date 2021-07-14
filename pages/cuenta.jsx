@@ -18,7 +18,7 @@ const useHistorialCompras = token => {
   const [loadingEjercicios, setLoadingEjercicios] = useState(false)
 
   useEffect(() => {
-    const fetchOrders = async () => {
+    const fetchOrders = async token => {
       try {
         setLoadingOrders(true)
         const ordersUrl = `${API_URL}/orders`
@@ -35,7 +35,7 @@ const useHistorialCompras = token => {
       }
       setLoadingOrders(false)
     }
-    const fetchEjercicios = async () => {
+    const fetchEjercicios = async token => {
       try {
         setLoadingEjercicios(true)
         const ejerciciosUrl = `${API_URL}/ejercicios/comprados`
@@ -53,8 +53,8 @@ const useHistorialCompras = token => {
       setLoadingEjercicios(false)
     }
     if (token) {
-      fetchEjercicios()
-      fetchOrders()
+      fetchEjercicios(token)
+      fetchOrders(token)
     }
   }, [token])
 
