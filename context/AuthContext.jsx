@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { Magic } from "magic-sdk"
 import { useToasts } from 'react-toast-notifications';
 
-import { MAGIC_PUBLIC_KEY } from "../lib/urls"
+import { API_URL, MAGIC_PUBLIC_KEY } from "../lib/urls"
 
 const AuthContext = createContext()
 
@@ -11,6 +11,8 @@ let magic
 export const AuthProvider = props => {
 
   const [user, setUser] = useState(null)
+  const [IDsEjercicios, setIDsEjercicios] = useState(null)
+  const [token, setToken] = useState(null)
   const [loadingUser, setLoadingUser] = useState(false)
   const router = useRouter()
 
@@ -38,32 +40,59 @@ export const AuthProvider = props => {
 
   const checkIsLoggedIn = async () => {
     try {
-      addToast("Checking if is logged in", { appearance: 'info' })
+      addToast("Viendo si está logueado", { appearance: 'info' })
       setLoadingUser(true)
       const isLoggedIn = await magic.user.isLoggedIn()
 
       if (isLoggedIn) {
-        addToast("Is logged in. Now getting metadata", { appearance: 'info' })
+        addToast("Recuperando sesión", { appearance: 'info' })
         const { email } = await magic.user.getMetadata()
-        addToast("Metadata gotten: " + email, { appearance: 'success' })
+        addToast("Sesión iniciada como " + email, { appearance: 'success' })
         setUser({ email })
+        setLoadingUser(false)
+
+        const newToken = await getToken()
+        setToken(newToken)
+        // Obtiene los IDs de los ejercicios que ha adquirido este usuario
+        addToast("Obteniendo IDs de ejercicios comprados", { appearance: 'info' })
+        const ejerciciosUrl = `${API_URL}/ejercicios/comprados-ids`
+        const ejercicios_res = await fetch(ejerciciosUrl, {
+          headers: {
+            "Authorization": `Bearer ${newToken}`
+          }
+        })
+
+        const ejercicios = await ejercicios_res.json()
+
+        if (!ejercicios || !ejercicios.length) {
+          addToast("Ningún ejercicio comprado", { appearance: 'info' })
+        } else {
+          let texto = `${ejercicios.length} ejercicios comprados`
+          if (ejercicios.length === 1) {
+            texto = `${ejercicios.length} ejercicio comprado`
+          }
+          addToast(texto, { appearance: 'info' })
+        }
+        setIDsEjercicios(ejercicios)
       } else {
-        addToast("Apparently not logged in", { appearance: 'info' })
+        addToast("Inicia sesión para comprar", { appearance: 'info' })
       }
     } catch (err) {
-      addToast("Could not check if is logged in", { appearance: 'error' })
+      console.log(err)
+      addToast("No se pudo obtener informacion sobre la sesión", { appearance: 'error' })
     }
     setLoadingUser(false)
   }
 
   const getToken = async () => {
     try {
-      addToast("Getting token", { appearance: 'info' })
-      const token = await magic.user.getIdToken({lifespan: 86400 /*24h*/})
-      addToast("Token gotten", { appearance: 'success' })
-      return token
+      addToast("Obteniendo token de acceso", { appearance: 'info' })
+      const newToken = await magic.user.getIdToken({ lifespan: 86400 /*24h*/ })
+      addToast("Token obtenida", { appearance: 'success' })
+      return newToken
     } catch (err) {
-      addToast("Failed to get token: " + err.toString(), { appearance: 'error' })
+      console.log(err)
+      addToast("No se pudo obtener token", { appearance: 'warning' })
     }
   }
 
@@ -73,7 +102,7 @@ export const AuthProvider = props => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, loadingUser, loginUser, logoutUser, getToken }}>
+    <AuthContext.Provider value={{ user, IDsEjercicios, token, loadingUser, loginUser, logoutUser }}>
       {props.children}
     </AuthContext.Provider>
   )
