@@ -1,5 +1,6 @@
 import Head from "next/head"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
+import { useToasts } from "react-toast-notifications"
 
 import AuthContext from "../../context/AuthContext"
 import EjerciciosContext from "../../context/EjerciciosContext"
@@ -13,7 +14,7 @@ import utilStyles from "../../styles/utils.module.css"
 * Este Hook verifica si el ejercicio esta en la lista de ejercicios que ha
 * comprado el usuario, y si está, pide la solucion a Strapi.
 */
-const useSolucion = async (IDsEjercicios, id, token) => {
+const useSolucion = (IDsEjercicios, id, token, addToast) => {
   const [solucionDisponible, setSolucionDisponible] = useState(false)
   const [loadingSolucion, setLoadingSolucion] = useState(false)
   const [solucion, setSolucion] = useState(null)
@@ -21,6 +22,7 @@ const useSolucion = async (IDsEjercicios, id, token) => {
   useEffect(() => {
     const fetchSolucion = async (id, token) => {
       try {
+        addToast("Obteniendo solucion", { appearance: "info" })
         setLoadingSolucion(true)
         const solucionUrl = `${API_URL}/solucion/${id}`
         const solucion_res = await fetch(solucionUrl, {
@@ -30,7 +32,12 @@ const useSolucion = async (IDsEjercicios, id, token) => {
         })
         const data = await solucion_res.json()
         setSolucion(data)
-      } catch (err) {}
+        if (data.statusCode && data.statusCode !== 200) {
+          addToast(data.message, { appearance: "error" })
+        }
+      } catch (err) {
+        addToast(err.toString(), { appearance })
+      }
       setLoadingSolucion(false)
     }
 
@@ -40,6 +47,8 @@ const useSolucion = async (IDsEjercicios, id, token) => {
         setSolucionDisponible(true)
         // Cargar la solucion
         fetchSolucion(id, token)
+      } else {
+        addToast("Solucion no disponible", { appearance: "warning" })
       }
     }
   }, [IDsEjercicios, id])
@@ -55,12 +64,13 @@ export default function Post({ ejercicio }) {
   const { titulo, id, descripcion, categoria, categoriaFormato } = ejercicio
   const { token } = useContext(AuthContext)
   const { IDsEjercicios } = useContext(EjerciciosContext)
+  const { addToast } = useToasts()
 
   const {
     solucionDisponible,
-    solucion,
+    solucion: data,
     loadingSolucion
-  } = useSolucion(IDsEjercicios, id, token)
+  } = useSolucion(IDsEjercicios, id, token, addToast)
 
   return (
     <SeccionEjercicios categoria={categoria} categoriaFormato={categoriaFormato}>
@@ -83,7 +93,10 @@ export default function Post({ ejercicio }) {
           loadingSolucion ?
             <h3 style={{textAlign: "center"}}>Cargando solucion...</h3>
           :
-            <div dangerouslySetInnerHTML={{ __html: solucion}}></div>
+            <>
+              <div dangerouslySetInnerHTML={{ __html: data.solucion}}></div>
+              <p>descarga: {data.solucion_pdf_url}</p>
+            </>
         }
       </section>
     </SeccionEjercicios>
