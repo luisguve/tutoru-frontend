@@ -44,12 +44,11 @@ export function EjerciciosProvider({children}) {
       }
     }
     if (token) {
-      console.log("Token:", token)
       getEjercicios(token)
     }
   }, [token])
   return (
-     <EjerciciosContext.Provider value={ IDsEjercicios }>
+     <EjerciciosContext.Provider value={{ IDsEjercicios }}>
        {children}
      </EjerciciosContext.Provider>
   )
