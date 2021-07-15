@@ -11,7 +11,6 @@ let magic
 export const AuthProvider = props => {
 
   const [user, setUser] = useState(null)
-  const [IDsEjercicios, setIDsEjercicios] = useState(null)
   const [token, setToken] = useState(null)
   const [loadingUser, setLoadingUser] = useState(false)
   const router = useRouter()
@@ -40,7 +39,7 @@ export const AuthProvider = props => {
 
   const checkIsLoggedIn = async () => {
     try {
-      addToast("Viendo si está logueado", { appearance: 'info' })
+      addToast("Verificando sesión", { appearance: 'info' })
       setLoadingUser(true)
       const isLoggedIn = await magic.user.isLoggedIn()
 
@@ -53,27 +52,6 @@ export const AuthProvider = props => {
 
         const newToken = await getToken()
         setToken(newToken)
-        // Obtiene los IDs de los ejercicios que ha adquirido este usuario
-        addToast("Obteniendo IDs de ejercicios comprados", { appearance: 'info' })
-        const ejerciciosUrl = `${API_URL}/ejercicios/comprados-ids`
-        const ejercicios_res = await fetch(ejerciciosUrl, {
-          headers: {
-            "Authorization": `Bearer ${newToken}`
-          }
-        })
-
-        const ejercicios = await ejercicios_res.json()
-
-        if (!ejercicios || !ejercicios.length) {
-          addToast("Ningún ejercicio comprado", { appearance: 'info' })
-        } else {
-          let texto = `${ejercicios.length} ejercicios comprados`
-          if (ejercicios.length === 1) {
-            texto = `${ejercicios.length} ejercicio comprado`
-          }
-          addToast(texto, { appearance: 'info' })
-        }
-        setIDsEjercicios(ejercicios)
       } else {
         addToast("Inicia sesión para comprar", { appearance: 'info' })
       }
@@ -102,7 +80,7 @@ export const AuthProvider = props => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, IDsEjercicios, token, loadingUser, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser }}>
       {props.children}
     </AuthContext.Provider>
   )
