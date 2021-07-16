@@ -7,6 +7,7 @@ import { API_URL } from "../lib/urls"
 const EjerciciosContext = createContext()
 
 export function EjerciciosProvider({children}) {
+  const [loadingIDsEjercicios, setLoading] = useState(false)
   const [IDsEjercicios, setIDsEjercicios] = useState(null)
   const { addToast } = useToasts()
 
@@ -15,6 +16,7 @@ export function EjerciciosProvider({children}) {
     // Obtiene los IDs de los ejercicios que ha adquirido este usuario
     const getEjercicios = async token => {
       addToast("Obteniendo IDs de ejercicios comprados", { appearance: 'info' })
+      setLoading(true)
       try {
         const ejerciciosUrl = `${API_URL}/ejercicios/comprados-ids`
 
@@ -42,13 +44,14 @@ export function EjerciciosProvider({children}) {
         console.log(err)
         addToast("No se pudieron obtener los IDs de los ejercicios comprados", { appearance: 'error' })
       }
+      setLoading(false)
     }
     if (token) {
       getEjercicios(token)
     }
   }, [token])
   return (
-     <EjerciciosContext.Provider value={{ IDsEjercicios }}>
+     <EjerciciosContext.Provider value={{ IDsEjercicios, loadingIDsEjercicios }}>
        {children}
      </EjerciciosContext.Provider>
   )
