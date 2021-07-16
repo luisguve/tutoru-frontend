@@ -98,7 +98,7 @@ export default function Cuenta() {
         {
           loadingEjercicios ?
           <h3 style={{textAlign: "center"}}>
-            Cargando ejercicios...
+            Cargando tus ejercicios...
           </h3>
           :
           (!ejercicios || !ejercicios.length) ?
@@ -106,14 +106,17 @@ export default function Cuenta() {
               Los ejercicios que compres aparecerán aquí
             </h3>
           :
-            <ListaEjercicios irSolucion={true}>
-              {ejercicios}
-            </ListaEjercicios>
+            <div>
+              <h2 style={{textAlign: "center"}}>Tus ejercicios</h2>
+              <ListaEjercicios irSolucion={true}>
+                {ejercicios}
+              </ListaEjercicios>
+            </div>
         }
         {
           loadingOrders ?
           <h3 style={{textAlign: "center"}}>
-            Cargando ordenes de compra...
+            Cargando tus ordenes de compra...
           </h3>
           :
           (!orders || !orders.length) ?
@@ -121,20 +124,23 @@ export default function Cuenta() {
               Tus órdenes de compra aparecerán aquí
             </h3>
           :
-            <ul>
-              {
-                orders.map(o => (
-                  <li key={o.id}>
-                    <div>
-                      <span>Total: {o.total}</span> - 
-                      <span>Fecha: {o.updated_at}</span> - 
-                      <span>Estado: {o.estado}</span> - 
-                      <span>ID: {o.id}</span>
-                    </div>
-                  </li>
-                )
-              )}
-            </ul>
+            <div>
+              <h2 style={{textAlign: "center"}}>Tu historial de compras</h2>
+              <ul>
+                {
+                  orders.map(o => (
+                    <li key={o.id}>
+                      <div>
+                        <span>Total: {o.total}</span> - 
+                        <span>Fecha: {o.updated_at}</span> - 
+                        <span>Estado: {o.estado}</span> - 
+                        <span>ID: {o.id}</span>
+                      </div>
+                    </li>
+                  )
+                )}
+              </ul>
+            </div>
         }
         <button onClick={() => logoutUser()}>logout</button>
       </div>
