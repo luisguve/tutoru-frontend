@@ -80,7 +80,7 @@ const useSolucion = (id, enSeccion, irSolucion) => {
 */
 const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
 
-  const { id, slug, titulo, categoria, descripcion, descripcionCorta, precio } = contenido
+  const { id, slug, titulo, categoria, descripcion, descripcion_corta, precio } = contenido
 
   const {
     solucionDisponible,
@@ -99,7 +99,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
         enSeccion ? // Estamos en la pagina de la categoria (list)
           <div>
             <Link href={ejercicioURL}><a>{titulo}</a></Link>
-            <div dangerouslySetInnerHTML={{ __html: descripcionCorta}}></div>
+            <div dangerouslySetInnerHTML={{ __html: descripcion_corta}}></div>
           </div>
         : // Estamos en la pagina del ejercicio (single page)
           <div>

@@ -14,11 +14,11 @@ export async function getStaticProps() {
 }
 
 export default function Home({ ejercicios }) {
-  const postsList = ejercicios.map(({ slug, titulo, descripcionCorta, categoria, categoriaFormato }) => (
+  const postsList = ejercicios.map(({ slug, titulo, descripcion_corta, categoria, categoriaFormato }) => (
     <li className={utilStyles.listItem} key={slug}>
       <Link href={`/${categoria}/${slug}`}><a>{categoriaFormato} - {titulo}</a></Link>
       <br />
-      <div dangerouslySetInnerHTML={{ __html: descripcionCorta}}></div>
+      <div dangerouslySetInnerHTML={{ __html: descripcion_corta}}></div>
       <br />
     </li>
   ))
