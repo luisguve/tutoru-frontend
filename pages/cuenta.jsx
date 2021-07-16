@@ -5,9 +5,10 @@ import Head from "next/head"
 import { API_URL } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import SeccionEjercicios, { siteTitle } from "../components/SeccionEjercicios"
+import ListaEjercicios from "../components/categorias/ListaEjercicios"
 
 /*
-* Este es un Hook que pide a Strapi los ejercicios que ha adquirido el usuario
+* Este Hook pide a Strapi los ejercicios que ha adquirido el usuario
 * y sus ordenes de compra, ambas de manera asincrona e independiente.
 */
 const useHistorialCompras = token => {
@@ -105,17 +106,9 @@ export default function Cuenta() {
               Los ejercicios que compres aparecerán aquí
             </h3>
           :
-            <ul>
-              {
-                ejercicios.map(e => (
-                  <li key={e.titulo}>
-                    <Link href={`/${e.categoria}/${e.slug}`}>
-                      <a>{e.titulo}</a>
-                    </Link>
-                  </li>
-                )
-              )}
-            </ul>
+            <ListaEjercicios irSolucion={true}>
+              {ejercicios}
+            </ListaEjercicios>
         }
         {
           loadingOrders ?
