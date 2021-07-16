@@ -3,6 +3,7 @@ import Head from "next/head"
 
 import { getEjercicios } from "../../lib/contenidos"
 import SeccionEjercicios, { siteTitle } from "../../components/SeccionEjercicios"
+import ListaEjercicios from "../../components/categorias/ListaEjercicios"
 import utilStyles from "../../styles/utils.module.css"
 
 export async function getStaticProps() {
@@ -15,23 +16,15 @@ export async function getStaticProps() {
 }
 
 export default function Ejercicios ({ ejercicios }) {
-  const postsList = ejercicios.map(({ slug, titulo, descripcionCorta }) => (
-    <li className={utilStyles.listItem} key={slug}>
-      <Link href={`/termodinamica/${slug}`}><a>{titulo}</a></Link>
-      <br />
-      <p dangerouslySetInnerHTML={{ __html: descripcionCorta}}></p>
-      <br />
-    </li>
-  ))
   return (
     <SeccionEjercicios>
       <Head>
         <title>{siteTitle} | Termodinámica</title>
       </Head>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <ul className={utilStyles.list}>
-          {postsList}
-        </ul>
+        <ListaEjercicios>
+          {ejercicios}
+        </ListaEjercicios>
       </section>
     </SeccionEjercicios>
   )
