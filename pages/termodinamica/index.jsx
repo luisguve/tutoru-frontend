@@ -22,7 +22,7 @@ export default function Ejercicios ({ ejercicios }) {
         <title>{siteTitle} | Termodinámica</title>
       </Head>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <ListaEjercicios>
+        <ListaEjercicios irSolucion={false}>
           {ejercicios}
         </ListaEjercicios>
       </section>

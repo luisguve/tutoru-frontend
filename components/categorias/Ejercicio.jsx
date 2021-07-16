@@ -13,7 +13,7 @@ import { API_URL } from "../../lib/urls"
 * ver la solucion o directamente la pide a Strapi, dependiendo del parametro
 * enSeccion.
 */
-const useSolucion = (id, enSeccion) => {
+const useSolucion = (id, enSeccion, irSolucion) => {
   const [solucionDisponible, setSolucionDisponible] = useState(false)
   const [loadingSolucion, setLoadingSolucion] = useState(false)
   const [solucion, setSolucion] = useState(null)
@@ -43,6 +43,11 @@ const useSolucion = (id, enSeccion) => {
       setLoadingSolucion(false)
     }
 
+    if (irSolucion) {
+      setSolucionDisponible(true)
+      return
+    }
+
     // Verifica si el usuario adquirió el ejercicio
     if (IDsEjercicios && IDsEjercicios.length) {
       if (IDsEjercicios.includes(id)) {
@@ -53,8 +58,6 @@ const useSolucion = (id, enSeccion) => {
           fetchSolucion(id, token)
         }
         setSolucionDisponible(true)
-      } else {
-        addToast("Solucion no disponible", { appearance: "warning" })
       }
     }
   }, [IDsEjercicios, id])
@@ -72,9 +75,10 @@ const useSolucion = (id, enSeccion) => {
 * o su precio junto con un link a login si el usuario no ha iniciado sesion.
 * 
 * Muestra la solucion al ejercicio o un link a su solucion dependiendo de la
-* prop enSeccion y de si el usuario tiene acceso a este ejercicio.
+* prop enSeccion y de si el usuario tiene acceso a este ejercicio, o 
+* directamente de la prop irSolucion.
 */
-const Ejercicio = ({ contenido, enSeccion }) => {
+const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
 
   const { id, slug, titulo, categoria, descripcion, descripcionCorta, precio } = contenido
 
@@ -82,7 +86,7 @@ const Ejercicio = ({ contenido, enSeccion }) => {
     solucionDisponible,
     solucion: data,
     loadingSolucion
-  } = useSolucion(id, enSeccion)
+  } = useSolucion(id, enSeccion, irSolucion)
 
   const { loadingIDsEjercicios } = useContext(EjerciciosContext)
   const { user, loadingUser } = useContext(AuthContext)
@@ -118,7 +122,8 @@ const Ejercicio = ({ contenido, enSeccion }) => {
               }
             </div>
           :
-            (loadingUser || loadingIDsEjercicios) ? // El usuario esta cargando
+            (loadingUser || loadingIDsEjercicios) && !solucionDisponible ?
+              // El usuario esta cargando
               <div>
                 <strong>${precio}</strong> 
                 <p>Cargando usuario...</p>
