@@ -40,10 +40,10 @@ export const AuthProvider = props => {
   const checkIsLoggedIn = async () => {
     try {
       addToast("Verificando sesión", { appearance: 'info' })
-      setLoadingUser(true)
       const isLoggedIn = await magic.user.isLoggedIn()
 
       if (isLoggedIn) {
+        setLoadingUser(true)
         addToast("Recuperando sesión", { appearance: 'info' })
         const { email } = await magic.user.getMetadata()
         addToast("Sesión iniciada como " + email, { appearance: 'success' })
