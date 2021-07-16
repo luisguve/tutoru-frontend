@@ -25,7 +25,7 @@ export default function PaginaEjercicio({ ejercicio }) {
 }
 
 export async function getStaticProps({ params }) {
-  const ejercicio = await getEjercicio(params.slug)
+  const ejercicio = await getEjercicio(params.ejercicio)
   return {
     props: {
       ejercicio
