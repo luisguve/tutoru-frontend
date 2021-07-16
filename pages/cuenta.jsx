@@ -108,9 +108,7 @@ export default function Cuenta() {
           :
             <div>
               <h2 style={{textAlign: "center"}}>Tus ejercicios</h2>
-              <ListaEjercicios irSolucion={true}>
-                {ejercicios}
-              </ListaEjercicios>
+              <ListaEjercicios irSolucion={true} contenido={ejercicios} />
             </div>
         }
         {
