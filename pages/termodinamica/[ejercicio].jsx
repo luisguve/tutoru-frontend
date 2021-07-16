@@ -1,42 +1,28 @@
-import Head from "next/head"
-
-import SeccionEjercicios, { siteTitle } from '../../components/SeccionEjercicios'
-import Ejercicio from '../../components/categorias/Ejercicio'
-import { getEjerciciosIds, getEjercicio } from '../../lib/contenidos'
-import utilStyles from "../../styles/utils.module.css"
-
-/*
-* Este componente muestra el ejercicio completo junto con su solucion si
-* el usuario ha comprado este ejercicio. Muestra un texto de carga cuando la
-* solucion al ejercicio esta siendo descargada.
-*/
-export default function PaginaEjercicio({ ejercicio }) {
-  const { titulo, id, descripcion, categoria, categoriaFormato } = ejercicio
-
-  return (
-    <SeccionEjercicios categoria={categoria} categoriaFormato={categoriaFormato}>
-      <Head>
-        <title>{siteTitle} | {categoriaFormato} | {titulo}</title>
-      </Head>
-      <h1>{categoriaFormato}</h1>
-      <Ejercicio contenido={ejercicio} enSeccion={false} />
-    </SeccionEjercicios>
-  )
-}
+import { getEjerciciosIds, getEjercicio } from "../../lib/contenidos"
+import PaginaEjercicio from "../../components/categorias/PaginaEjercicio"
+import { categoria } from "."
 
 export async function getStaticProps({ params }) {
-  const ejercicio = await getEjercicio(params.ejercicio)
+  const contenido = await getEjercicio(params.ejercicio)
   return {
     props: {
-      ejercicio
+      contenido
     }
   }
 }
 
 export async function getStaticPaths() {
-  const paths = getEjerciciosIds("termodinamica")
+  const paths = await getEjerciciosIds(categoria)
   return {
     paths,
     fallback: false
   }
+}
+
+/*
+* Se desea mantener el minimo codigo posible en este componente ya que sera
+* copiado el mismo en las otras categorias.
+*/
+export default function Ejercicio({ contenido }) {
+  return <PaginaEjercicio contenido={contenido} />
 }

@@ -1,31 +1,21 @@
-import Link from "next/link"
-import Head from "next/head"
-
 import { getEjercicios } from "../../lib/contenidos"
-import SeccionEjercicios, { siteTitle } from "../../components/SeccionEjercicios"
-import ListaEjercicios from "../../components/categorias/ListaEjercicios"
-import utilStyles from "../../styles/utils.module.css"
+import PaginaCategoria from "../../components/categorias/PaginaCategoria"
 
 export async function getStaticProps() {
-  const ejercicios = await getEjercicios("termodinamica")
   return {
     props: {
-      ejercicios
+      contenido: await getEjercicios(categoria)
     }
   }
 }
 
-export default function Ejercicios ({ ejercicios }) {
-  return (
-    <SeccionEjercicios>
-      <Head>
-        <title>{siteTitle} | Termodinámica</title>
-      </Head>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <ListaEjercicios irSolucion={false}>
-          {ejercicios}
-        </ListaEjercicios>
-      </section>
-    </SeccionEjercicios>
-  )
+/*
+* Se desea mantener el minimo codigo posible en este componente ya que sera
+* copiado el mismo en las otras categorias.
+*/
+export default function Categoria({ contenido }) {
+  return <PaginaCategoria label={categoriaTitulo} contenido={contenido} />
 }
+
+export const categoria = "termodinamica"
+export const categoriaTitulo = "Termodinámica"
