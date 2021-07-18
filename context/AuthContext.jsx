@@ -13,6 +13,7 @@ export const AuthProvider = props => {
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
   const [loadingUser, setLoadingUser] = useState(false)
+  const [loadingToken, setLoadingToken] = useState(false)
   const router = useRouter()
 
   const { addToast } = useToasts()
@@ -50,8 +51,10 @@ export const AuthProvider = props => {
         setUser({ email })
         setLoadingUser(false)
 
+        setLoadingToken(true)
         const newToken = await getToken()
         setToken(newToken)
+        setLoadingToken(false)
       } else {
         addToast("Inicia sesión para comprar", { appearance: 'info' })
       }
@@ -80,7 +83,7 @@ export const AuthProvider = props => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser, loadingToken }}>
       {props.children}
     </AuthContext.Provider>
   )
