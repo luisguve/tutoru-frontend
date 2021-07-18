@@ -9,7 +9,7 @@ import { STRIPE_PK, API_URL } from "../lib/urls"
 const stripePromise = loadStripe(STRIPE_PK)
 
 export default function BotonComprar({ ejercicio }) {
-  const { user, getToken } = useContext(AuthContext)
+  const { user, token } = useContext(AuthContext)
   const { addToast } = useToasts()
 
   if (!user) {
@@ -21,7 +21,6 @@ export default function BotonComprar({ ejercicio }) {
   const handleCompra = async () => {
     try {
       const stripe = await stripePromise
-      const token = await getToken()
 
       const orderUrl = `${API_URL}/orders`
       const orderOptions = {
