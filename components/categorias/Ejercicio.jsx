@@ -4,7 +4,7 @@ import Link from "next/link"
 
 import AuthContext from "../../context/AuthContext"
 import EjerciciosContext from "../../context/EjerciciosContext"
-import BotonComprar from "../BotonComprar"
+import BotonAgregarCarrito from "../BotonAgregarCarrito"
 import { API_URL } from "../../lib/urls"
 
 /*
@@ -152,7 +152,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
                 // El usuario no tiene acceso a la solucion de este ejercicio
                 <div>
                   <p><strong>${precio}</strong></p>
-                  <div><BotonComprar ejercicio={contenido} /></div>
+                  <div><BotonAgregarCarrito ejercicio={contenido} /></div>
                 </div>
         }
       </div>
