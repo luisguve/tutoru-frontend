@@ -11,7 +11,7 @@ export function EjerciciosProvider({children}) {
   const [IDsEjercicios, setIDsEjercicios] = useState(null)
   const { addToast } = useToasts()
 
-  const { token } = useContext(AuthContext)
+  const { user, token } = useContext(AuthContext)
   useEffect(() => {
     // Obtiene los IDs de los ejercicios que ha adquirido este usuario
     const getEjercicios = async token => {
@@ -46,10 +46,10 @@ export function EjerciciosProvider({children}) {
       }
       setLoading(false)
     }
-    if (token) {
+    let idsRecuperados = false
+    if (user) {
       // Intenta obtener los IDs de los ejercicios del local storage
       const { data: ejerciciosData } = obtenerSesion()
-      let idsRecuperados = false
       if (ejerciciosData) {
         const { IDs } = ejerciciosData
         setIDsEjercicios(IDs)
@@ -57,11 +57,12 @@ export function EjerciciosProvider({children}) {
         if (!IDs || !IDs.length) {
           addToast("Ningún ejercicio comprado", { appearance: 'info' })
         }
-      } else {
-        getEjercicios(token)
       }
     }
-  }, [token])
+    if (!idsRecuperados && token) {
+      getEjercicios(token)
+    }
+  }, [user, token])
   return (
      <EjerciciosContext.Provider value={{ IDsEjercicios, loadingIDsEjercicios }}>
        {children}
@@ -80,7 +81,7 @@ const obtenerSesion = () => {
       }
     }
   }
-  return null
+  return {}
 }
 const guardarSesion = IDs => {
   if (typeof(Storage) !== undefined) {
