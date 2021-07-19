@@ -4,6 +4,7 @@ import { loadStripe } from "@stripe/stripe-js"
 
 import AuthContext from "../context/AuthContext"
 import CarritoContext from "../context/CarritoContext"
+import { limpiarSesion as limparEjerciciosComprados } from "../context/EjerciciosContext"
 import styles from "../styles/Carrito.module.css"
 import { STRIPE_PK, API_URL } from "../lib/urls"
 
@@ -131,7 +132,7 @@ const Checkout = props => {
   const { addToast } = useToasts()
 
   const { token, loadingToken, loadToken } = useContext(AuthContext)
-  const { articulosIDs } = useContext(CarritoContext)
+  const { articulosIDs, limpiar: limpiarCarrito } = useContext(CarritoContext)
   // Opcion de pago por defecto: tarjeta de credito
   const [checkedCC, setCheckedCC] = useState(true)
   const [metodo, setMetodo] = useState("CC")
@@ -162,6 +163,8 @@ const Checkout = props => {
 
       if (id) {
         addToast("Redireccionando a stripe", { appearance: "success" })
+        limpiarCarrito()
+        limparEjerciciosComprados()
         await stripe.redirectToCheckout({
           sessionId: id
         })
