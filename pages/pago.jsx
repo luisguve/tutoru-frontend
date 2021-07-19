@@ -6,16 +6,30 @@ import { useToasts } from "react-toast-notifications"
 import { API_URL } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 
-const useOrder = (user, getToken, confirmante, addToast) => {
+const useOrder = (user, confirmante, addToast) => {
   const [order, setOrder] = useState(null)
   const [loadingOrder, setLoading] = useState(false)
+  const { token, loadingToken, loadToken } = useContext(AuthContext)
 
   useEffect(() => {
     const fetchOrder = async () => {
+      // Carga el token si no esta disponible
+      let intentos = 0
+      while (!token && !loadingToken) {
+        if (intentos === 5) {
+          addToast("No se pudo verificar el pago. Contacte con soporte", {appearance: "error"})
+          return
+        }
+        try {
+          await loadToken()
+        } catch(err) {
+          console.log(err)
+        }
+        intentos++
+      }
       if (user) {
         try {
           setLoading(true)
-          const token = await getToken()
           addToast("Confirmado pago", {appearance: "info"})
           const orderUrl = `${API_URL}/orders/confirm`
           const order_res = await fetch(orderUrl, {
@@ -53,9 +67,9 @@ export default function Pago() {
   
   const { addToast } = useToasts()
 
-  const { user, loadingUser, getToken } = useContext(AuthContext)
+  const { user, loadingUser, loadingToken } = useContext(AuthContext)
 
-  const { order, loadingOrder } = useOrder(user, getToken, confirmante, addToast)
+  const { order, loadingOrder } = useOrder(user, confirmante, addToast)
 
   return (
     <div>
@@ -64,7 +78,7 @@ export default function Pago() {
       </Head>
       <h1>
         {
-          loadingUser || loadingOrder ? "Confirmando pago"
+          loadingUser || loadingOrder || loadingToken ? "Confirmando pago"
                   :
           order ? "¡Compra exitosa!" : "El pago no pudo ser confirmado"
         }
