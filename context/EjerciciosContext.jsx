@@ -94,7 +94,7 @@ const guardarSesion = IDs => {
     }))
   }
 }
-const limpiarSesion = () => {
+export const limpiarSesion = () => {
   if (typeof(Storage) !== undefined) {
     const data = JSON.parse(localStorage.getItem("data"))
     delete data.ejerciciosIDs
