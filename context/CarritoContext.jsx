@@ -1,15 +1,20 @@
 import { createContext, useEffect, useContext, useState } from "react"
 
 import AuthContext from "./AuthContext"
+import EjerciciosContext from "./EjerciciosContext"
 
 const CarritoContext = createContext()
 
 export const CarritoProvider = props => {
   const { user } = useContext(AuthContext)
+  const { IDsEjercicios: comprados } = useContext(EjerciciosContext)
   const [articulos, setArticulos] = useState([])
   const [articulosIDs, setArticulosIDs] = useState([])
 
   const agregar = articulo => {
+    for (let i = articulosIDs.length - 1; i >= 0; i--) {
+      if (articulosIDs[i].id === articulo.id) return
+    }
     const nuevosArticulos = [...articulos, articulo]
     setArticulos(nuevosArticulos)
     const nuevosIDs = [...articulosIDs, {id: articulo.id}]
@@ -43,11 +48,24 @@ export const CarritoProvider = props => {
           setArticulosIDs(articulosIDs)
         }
       }
+    } else {
+      setArticulos([])
+      setArticulosIDs([])
     }
   }, [user])
+  useEffect(() => {
+    // Elimina los ejercicios que ha comprado el usuario del carrito de compras.
+    if (comprados) {
+      articulosIDs.map(a => {
+        if (comprados.includes(c => c.id === a.id)) {
+          quitar(a)
+        }
+      })
+    }
+  }, [comprados])
 
   return (
-    <CarritoContext.Provider value={{articulos, articulosIDs , agregar, quitar, limpiar}}>
+    <CarritoContext.Provider value={{articulos, articulosIDs, agregar, quitar, limpiar}}>
       {props.children}
     </CarritoContext.Provider>
   )
