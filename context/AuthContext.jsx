@@ -78,6 +78,8 @@ export const AuthProvider = props => {
         addToast("Inicia sesión para comprar", { appearance: 'info' })
         limpiarSesion()
         limpiarToken()
+        setUser(null)
+        setToken(null)
       }
     } catch (err) {
       console.log(err)
