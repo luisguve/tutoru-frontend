@@ -66,22 +66,13 @@ export const AuthProvider = props => {
       const isLoggedIn = await magic.user.isLoggedIn()
 
       if (isLoggedIn) {
+        addToast("Sesión activa", { appearance: "success" })
         // Carga la sesion de usuario si no ha sido recuperada del localStorage.
         if (!sesionRecuperada) {
-          setLoadingUser(true)
-          addToast("Recuperando sesión", { appearance: 'info' })
-          const { email } = await magic.user.getMetadata()
-          addToast("Sesión iniciada como " + email, { appearance: 'success' })
-          setUser({ email })
-          setLoadingUser(false)
-          guardarSesion(email)
+          await loadSession()
         }
         if (!tokenRecuperado) {
-          setLoadingToken(true)
-          const newToken = await getToken()
-          setToken(newToken)
-          setLoadingToken(false)
-          guardarToken(newToken)
+          await loadToken()
         }
       } else {
         addToast("Inicia sesión para comprar", { appearance: 'info' })
@@ -95,6 +86,23 @@ export const AuthProvider = props => {
     setLoadingUser(false)
   }
 
+  const loadSession = async () => {
+    setLoadingUser(true)
+    addToast("Recuperando sesión", { appearance: 'info' })
+    const { email } = await magic.user.getMetadata()
+    addToast("Sesión iniciada como " + email, { appearance: 'success' })
+    setUser({ email })
+    setLoadingUser(false)
+    guardarSesion(email)
+  }
+  const loadToken = async () => {
+    setLoadingToken(true)
+    const newToken = await getToken()
+    setToken(newToken)
+    setLoadingToken(false)
+    guardarToken(newToken)
+  }
+
   const getToken = async () => {
     try {
       addToast("Obteniendo token de acceso", { appearance: 'info' })
@@ -105,6 +113,7 @@ export const AuthProvider = props => {
       console.log(err)
       addToast("No se pudo obtener token", { appearance: 'warning' })
     }
+    return null
   }
 
   useEffect(() => {
@@ -113,7 +122,7 @@ export const AuthProvider = props => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser, loadingToken }}>
+    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser, loadingToken, loadToken }}>
       {props.children}
     </AuthContext.Provider>
   )
