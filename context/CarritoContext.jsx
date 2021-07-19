@@ -1,8 +1,11 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect, useContext, useState } from "react"
+
+import AuthContext from "./AuthContext"
 
 const CarritoContext = createContext()
 
 export const CarritoProvider = props => {
+  const { user } = useContext(AuthContext)
   const [articulos, setArticulos] = useState([])
   const [articulosIDs, setArticulosIDs] = useState([])
 
@@ -29,17 +32,19 @@ export const CarritoProvider = props => {
   }
 
   useEffect(() => {
-    const { data: carritoData } = obtenerSesion()
-    if (carritoData) {
-      const { articulos, articulosIDs } = carritoData
-      if (articulos) {
-        setArticulos(articulos)
-      }
-      if (articulosIDs) {
-        setArticulosIDs(articulosIDs)
+    if (user) {
+      const { data: carritoData } = obtenerSesion()
+      if (carritoData) {
+        const { articulos, articulosIDs } = carritoData
+        if (articulos) {
+          setArticulos(articulos)
+        }
+        if (articulosIDs) {
+          setArticulosIDs(articulosIDs)
+        }
       }
     }
-  }, [])
+  }, [user])
 
   return (
     <CarritoContext.Provider value={{articulos, articulosIDs , agregar, quitar, limpiar}}>
@@ -59,7 +64,7 @@ const obtenerSesion = () => {
       }
     }
   }
-  return null
+  return {}
 }
 const guardarSesion = (articulos, articulosIDs) => {
   if (typeof(Storage) !== undefined) {
