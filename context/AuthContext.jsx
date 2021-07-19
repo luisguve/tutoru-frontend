@@ -23,6 +23,8 @@ export const AuthProvider = props => {
       await magic.auth.loginWithMagicLink({ email })
       setUser({ email })
       addToast("Logged in as " + email, { appearance: 'success' })
+      guardarSesion(email)
+      loadToken()
       router.push("/")
     } catch (err) {
       setUser(null)
@@ -34,6 +36,7 @@ export const AuthProvider = props => {
       await magic.user.logout()
       setUser(null)
       limpiarSesion()
+      limpiarToken()
       addToast("Cerraste sesion", { appearance: 'info' })
       router.push("/")
     } catch (err) {}
@@ -139,7 +142,7 @@ const obtenerSesion = () => {
       data: JSON.parse(localStorage.getItem("data"))
     }
   }
-  return null
+  return {}
 }
 const guardarSesion = email => {
   if (typeof(Storage) !== undefined) {
@@ -160,7 +163,7 @@ const obtenerToken = () => {
       data: JSON.parse(sessionStorage.getItem("data"))
     }
   }
-  return null
+  return {}
 }
 const guardarToken = token => {
   if (typeof(Storage) !== undefined) {
