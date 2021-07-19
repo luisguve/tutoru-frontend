@@ -20,7 +20,7 @@ const Footer = () => {
     <footer>
       {user ?
         (<h4 className="user-info">
-          <Link href="/cuenta"><a>Logged in as {user.email}</a></Link>
+          <Link href="/cuenta"><a>Iniciaste como {user.email}</a></Link>
         </h4>)
         :
         (
