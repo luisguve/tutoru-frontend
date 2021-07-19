@@ -8,12 +8,12 @@ export const CarritoProvider = props => {
 
   const agregar = articulo => {
     setArticulos([...articulos, articulo])
-    setArticulosIDs([...articulosIDs, articulo.id])
+    setArticulosIDs([...articulosIDs, {id: articulo.id}])
   }
 
   const quitar = articulo => {
     setArticulos(articulos.filter(a => a.id !== articulo.id))
-    setArticulosIDs(lista => lista.filter(id => id !== articulo.id))
+    setArticulosIDs(articulosIDs.filter(a => a.id !== articulo.id))
   }
 
   const limpiar = () => {
