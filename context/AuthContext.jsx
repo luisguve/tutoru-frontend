@@ -146,7 +146,9 @@ const obtenerSesion = () => {
 }
 const guardarSesion = email => {
   if (typeof(Storage) !== undefined) {
+    const data = JSON.parse(localStorage.getItem("data"))
     localStorage.setItem("data", JSON.stringify({
+      ...data,
       email
     }))
   }
