@@ -33,7 +33,8 @@ export const AuthProvider = props => {
     try {
       await magic.user.logout()
       setUser(null)
-      addToast("Logged out", { appearance: 'success' })
+      limpiarSesion()
+      addToast("Cerraste sesion", { appearance: 'info' })
       router.push("/")
     } catch (err) {}
   }
