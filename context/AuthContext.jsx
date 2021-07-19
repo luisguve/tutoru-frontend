@@ -39,24 +39,54 @@ export const AuthProvider = props => {
   }
 
   const checkIsLoggedIn = async () => {
+    const { data: sesionData } = obtenerSesion()
+    let sesionRecuperada = false
+    if (sesionData) {
+      const { email } = sesionData
+      setUser({ email })
+      sesionRecuperada = true
+    }
+    let tokenRecuperado = false
+    const { data: tokenData } = obtenerToken()
+    if (tokenData) {
+      const { token, createdAt } = tokenData
+      const diferenciaMs = Date.now() - createdAt
+      const diferenciaHoras = Math.floor(diferenciaMs/1000/60/60)
+      if (diferenciaHoras > 24) {
+        // Elimina el token.
+        limpiarToken()
+      } else {
+        // Guarda el token en el contexto
+        tokenRecuperado = true
+        setToken(token)
+      }
+    }
     try {
       addToast("Verificando sesión", { appearance: 'info' })
       const isLoggedIn = await magic.user.isLoggedIn()
 
       if (isLoggedIn) {
-        setLoadingUser(true)
-        addToast("Recuperando sesión", { appearance: 'info' })
-        const { email } = await magic.user.getMetadata()
-        addToast("Sesión iniciada como " + email, { appearance: 'success' })
-        setUser({ email })
-        setLoadingUser(false)
-
-        setLoadingToken(true)
-        const newToken = await getToken()
-        setToken(newToken)
-        setLoadingToken(false)
+        // Carga la sesion de usuario si no ha sido recuperada del localStorage.
+        if (!sesionRecuperada) {
+          setLoadingUser(true)
+          addToast("Recuperando sesión", { appearance: 'info' })
+          const { email } = await magic.user.getMetadata()
+          addToast("Sesión iniciada como " + email, { appearance: 'success' })
+          setUser({ email })
+          setLoadingUser(false)
+          guardarSesion(email)
+        }
+        if (!tokenRecuperado) {
+          setLoadingToken(true)
+          const newToken = await getToken()
+          setToken(newToken)
+          setLoadingToken(false)
+          guardarToken(newToken)
+        }
       } else {
         addToast("Inicia sesión para comprar", { appearance: 'info' })
+        limpiarSesion()
+        limpiarToken()
       }
     } catch (err) {
       console.log(err)
@@ -90,3 +120,46 @@ export const AuthProvider = props => {
 }
 
 export default AuthContext
+
+const obtenerSesion = () => {
+  if (typeof(Storage) !== undefined) {
+    return {
+      data: JSON.parse(localStorage.getItem("data"))
+    }
+  }
+  return null
+}
+const guardarSesion = email => {
+  if (typeof(Storage) !== undefined) {
+    localStorage.setItem("data", JSON.stringify({
+      email
+    }))
+  }
+}
+const limpiarSesion = () => {
+  if (typeof(Storage) !== undefined) {
+    localStorage.removeItem("data")
+  }
+}
+
+const obtenerToken = () => {
+  if (typeof(Storage) !== undefined) {
+    return {
+      data: JSON.parse(sessionStorage.getItem("data"))
+    }
+  }
+  return null
+}
+const guardarToken = token => {
+  if (typeof(Storage) !== undefined) {
+    sessionStorage.setItem("data", JSON.stringify({
+      token,
+      createdAt: Date.now()
+    }))
+  }
+}
+const limpiarToken = () => {
+  if (typeof(Storage) !== undefined) {
+    sessionStorage.removeItem("data")
+  }
+}

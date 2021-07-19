@@ -15,17 +15,16 @@ export function EjerciciosProvider({children}) {
   useEffect(() => {
     // Obtiene los IDs de los ejercicios que ha adquirido este usuario
     const getEjercicios = async token => {
-      addToast("Obteniendo IDs de ejercicios comprados", { appearance: 'info' })
-      setLoading(true)
       try {
-        const ejerciciosUrl = `${API_URL}/ejercicios/comprados-ids`
+        addToast("Obteniendo IDs de ejercicios comprados", { appearance: 'info' })
+        setLoading(true)
 
+        const ejerciciosUrl = `${API_URL}/ejercicios/comprados-ids`
         const ejercicios_res = await fetch(ejerciciosUrl, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
         })
-
         const ejercicios = await ejercicios_res.json()
 
         if (!ejercicios || !ejercicios.length) {
@@ -39,6 +38,7 @@ export function EjerciciosProvider({children}) {
         }
 
         setIDsEjercicios(ejercicios)
+        guardarSesion(ejercicios)
 
       } catch (err) {
         console.log(err)
@@ -47,7 +47,19 @@ export function EjerciciosProvider({children}) {
       setLoading(false)
     }
     if (token) {
-      getEjercicios(token)
+      // Intenta obtener los IDs de los ejercicios del local storage
+      const { data: ejerciciosData } = obtenerSesion()
+      let idsRecuperados = false
+      if (ejerciciosData) {
+        const { IDs } = ejerciciosData
+        setIDsEjercicios(IDs)
+        idsRecuperados = true
+        if (!IDs || !IDs.length) {
+          addToast("Ningún ejercicio comprado", { appearance: 'info' })
+        }
+      } else {
+        getEjercicios(token)
+      }
     }
   }, [token])
   return (
@@ -58,3 +70,33 @@ export function EjerciciosProvider({children}) {
 }
 
 export default EjerciciosContext
+
+const obtenerSesion = () => {
+  if (typeof(Storage) !== undefined) {
+    const data = JSON.parse(localStorage.getItem("data"))
+    if (data) {
+      return {
+        data: data.ejerciciosIDs
+      }
+    }
+  }
+  return null
+}
+const guardarSesion = IDs => {
+  if (typeof(Storage) !== undefined) {
+    const data = JSON.parse(localStorage.getItem("data"))
+    localStorage.setItem("data", JSON.stringify({
+      ...data,
+      ejerciciosIDs: {
+        IDs
+      }
+    }))
+  }
+}
+const limpiarSesion = () => {
+  if (typeof(Storage) !== undefined) {
+    const data = JSON.parse(localStorage.getItem("data"))
+    delete data.ejerciciosIDs
+    localStorage.setItem("data", JSON.stringify(data))
+  }
+}
