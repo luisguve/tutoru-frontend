@@ -1,5 +1,4 @@
 import Ejercicio from "./Ejercicio"
-import categorias from "../../lib/categorias"
 
 /*
 * Este componente muestra los ejercicios que recibe en children.
@@ -13,7 +12,7 @@ const ListaEjercicios = ({ contenido: ejercicios, irSolucion }) => {
 
   const clasificados = ejercicios.reduce((grupos, e) => {
     // Establece el nombre de la categoria para títulos
-    const categoriaActual = categorias[e.categoria]
+    const categoriaActual = e.categoria.Titulo_normal
 
     if (!grupos[categoriaActual]) {
       grupos[categoriaActual] = []

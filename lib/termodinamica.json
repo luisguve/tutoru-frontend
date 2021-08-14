@@ -1,0 +1,76 @@
+{
+  "id": 1,
+  "Titulo_url": "termodinamica",
+  "Titulo_normal": "Termodinámica",
+  "padre": null,
+  "published_at": "2021-08-04T19:16:52.124Z",
+  "created_at": "2021-08-04T19:09:33.444Z",
+  "updated_at": "2021-08-04T19:16:52.300Z",
+  "Thumbnail": {
+    "id": 5,
+    "name": "cover_termodinamica.png",
+    "alternativeText": "",
+    "caption": "",
+    "width": 250,
+    "height": 325,
+    "formats": {
+      "thumbnail": {
+        "name": "thumbnail_cover_termodinamica.png",
+        "hash": "thumbnail_cover_termodinamica_0177efb5e2",
+        "ext": ".png",
+        "mime": "image/png",
+        "width": 120,
+        "height": 156,
+        "size": 20.83,
+        "path": null,
+        "url": "/uploads/thumbnail_cover_termodinamica_0177efb5e2.png"
+      }
+    },
+    "hash": "cover_termodinamica_0177efb5e2",
+    "ext": ".png",
+    "mime": "image/png",
+    "size": 64.96,
+    "url": "/uploads/cover_termodinamica_0177efb5e2.png",
+    "previewUrl": null,
+    "provider": "local",
+    "provider_metadata": null,
+    "created_at": "2021-08-04T19:09:29.848Z",
+    "updated_at": "2021-08-04T19:09:29.901Z"
+  },
+  "ejercicios": 2,
+  "hijos": [
+    {
+      "id": 11,
+      "Titulo_url": "medicion-de-presion-y-manometros",
+      "Titulo_normal": "Medición de presión y manómetros",
+      "published_at": "2021-08-07T20:01:28.993Z",
+      "created_at": "2021-08-07T20:01:26.098Z",
+      "updated_at": "2021-08-07T20:01:29.167Z",
+      "Thumbnail": null,
+      "ejercicios": 0,
+      "hijos": []
+    },
+    {
+      "id": 12,
+      "Titulo_url": "manejo-de-tablas-de-propiedades",
+      "Titulo_normal": "Manejo de tablas de propiedades",
+      "published_at": "2021-08-07T20:01:55.416Z",
+      "created_at": "2021-08-07T20:01:52.683Z",
+      "updated_at": "2021-08-07T20:04:02.268Z",
+      "Thumbnail": null,
+      "ejercicios": 0,
+      "hijos": []
+    },
+    {
+      "id": 13,
+      "Titulo_url": "propiedades-de-una-sustancia-pura",
+      "Titulo_normal": "Propiedades de una sustancia pura",
+      "published_at": "2021-08-07T20:02:18.350Z",
+      "created_at": "2021-08-07T20:02:15.409Z",
+      "updated_at": "2021-08-07T20:02:18.539Z",
+      "Thumbnail": null,
+      "ejercicios": 0,
+      "hijos": []
+    }
+  ]
+}

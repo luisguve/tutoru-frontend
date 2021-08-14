@@ -1,7 +1,7 @@
 import Head from "next/head"
 
 import { siteTitle } from "../../lib/metadata"
-import SeccionEjercicios from "../SeccionEjercicios"
+import EstructuraPagina from "../EstructuraPagina"
 import Ejercicio from "./Ejercicio"
 
 /*
@@ -14,18 +14,18 @@ import Ejercicio from "./Ejercicio"
 * descargada.
 */
 export default function PaginaEjercicio({ contenido }) {
-  const { titulo, id, descripcion, categoria, categoriaFormato } = contenido
+  const { titulo, id, descripcion, categoria } = contenido
 
   return (
-    <SeccionEjercicios categoria={categoria} categoriaFormato={categoriaFormato}>
+    <EstructuraPagina categoria={categoria}>
       <Head>
-        <title>{siteTitle} | {categoriaFormato} | {titulo}</title>
+        <title>{siteTitle} | {categoria.Titulo_normal} | {titulo}</title>
       </Head>
-      <h1>{categoriaFormato}</h1>
+      <h1>{categoria.Titulo_normal}</h1>
       <Ejercicio
         contenido={contenido}
         enSeccion={false}
       />
-    </SeccionEjercicios>
+    </EstructuraPagina>
   )
 }

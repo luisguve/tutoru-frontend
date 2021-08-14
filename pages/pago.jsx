@@ -7,6 +7,17 @@ import { API_URL } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import SeccionEjercicios from "../components/SeccionEjercicios"
 
+import { cargarNavItems } from "../lib/metadata"
+
+export async function getStaticProps() {
+  const navItems = await cargarNavItems()
+  return {
+    props: {
+      navItems
+    }
+  }
+}
+
 const useOrder = (confirmante) => {
   const [order, setOrder] = useState(null)
   const [loadingOrder, setLoading] = useState(false)
@@ -48,7 +59,7 @@ const useOrder = (confirmante) => {
   return {order, loadingOrder}
 }
 
-export default function Pago() {
+export default function Pago({navItems}) {
 
   const router = useRouter()
 
@@ -59,7 +70,7 @@ export default function Pago() {
   const { order, loadingOrder } = useOrder(confirmante)
 
   return (
-    <SeccionEjercicios>
+    <EstructuraPagina navItems={navItems}>
       <div>
         <Head>
           <title>Confirmación de compra</title>
@@ -83,6 +94,6 @@ export default function Pago() {
           </div>
         }
       </div>
-    </SeccionEjercicios>
+    </EstructuraPagina>
   )
 }

@@ -1,14 +1,28 @@
 .Icono {
-  position: absolute;
+  position: fixed;
   right: 10px;
   top: 50%;
-  z-index: 2;
+  z-index: 1021;
+}
+
+.Contenedor__Carrito {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: rgba(0,0,79,0.8);
+  z-index: 1022;
+}
+.Contenedor__Carrito.abierto {
+  display: block;
 }
 
 .Contenedor__Ventana {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 45%;
+  top: 43%;
 }
 
 .Ventana[data-ocultar="true"] {

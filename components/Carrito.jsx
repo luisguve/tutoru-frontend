@@ -8,7 +8,7 @@ import { limpiarSesion as limparEjerciciosComprados } from "../context/Ejercicio
 import styles from "../styles/Carrito.module.css"
 import { STRIPE_PK, API_URL } from "../lib/urls"
 
-const stripePromise = loadStripe(STRIPE_PK)
+// const stripePromise = loadStripe(STRIPE_PK)
 
 // Este hook retorna los articulos en el carrito como una lista, junto con
 // el precio total a pagar
@@ -31,13 +31,17 @@ const useInformacion = () => {
 export default function Carrito() {
   const [paso1, setPaso1] = useState(false)
   const [paso2, setPaso2] = useState(false)
+  const [classContenedorCarrito, setClass] = useState(styles.Contenedor__Carrito)
 
   const cerrarCarrito = () => {
     setPaso1(false)
+    setClass(styles.Contenedor__Carrito)
   }
   const irPaso1 = () => {
     setPaso1(true)
     setPaso2(false)
+    const className = `${styles.Contenedor__Carrito} ${styles.abierto}`
+    setClass(className)
   }
   const irPaso2 = () => {
     setPaso2(true)
@@ -66,24 +70,26 @@ export default function Carrito() {
 
   return (
     <>
-      <div className={styles.Contenedor__Ventana}>
-        {/* Ventana de confirmacion: */}
-        {/* En esta ventana se pueden quitar los articulos */}
-        <Confirmacion
-          ocultar={!paso1}
-          informacion={informacion}
-          lista={mostrarArticulos(true)}
-          volver={cerrarCarrito}
-          siguiente={irPaso2}
-        />
-        {/* Ventana de checkout: */}
-        {/* Se selecciona el metodo de pago y se redirige al checkout */}
-        <Checkout
-          ocultar={!paso2}
-          informacion={informacion}
-          lista={mostrarArticulos(false)}
-          volver={irPaso1}
-        />
+      <div className={classContenedorCarrito}>
+        <div className={styles.Contenedor__Ventana}>
+          {/* Ventana de confirmacion: */}
+          {/* En esta ventana se pueden quitar los articulos */}
+          <Confirmacion
+            ocultar={!paso1}
+            informacion={informacion}
+            lista={mostrarArticulos(true)}
+            volver={cerrarCarrito}
+            siguiente={irPaso2}
+          />
+          {/* Ventana de checkout: */}
+          {/* Se selecciona el metodo de pago y se redirige al checkout */}
+          <Checkout
+            ocultar={!paso2}
+            informacion={informacion}
+            lista={mostrarArticulos(false)}
+            volver={irPaso1}
+          />
+        </div>
       </div>
       <button className={styles.Icono} onClick={irPaso1}>
         Ver carrito {

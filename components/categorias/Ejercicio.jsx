@@ -91,7 +91,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
   const { loadingIDsEjercicios } = useContext(EjerciciosContext)
   const { user, loadingUser } = useContext(AuthContext)
 
-  const ejercicioURL = `/${categoria}/${slug}`
+  const ejercicioURL = `/${categoria.Titulo_url}/${slug}`
 
   return (
     <div>

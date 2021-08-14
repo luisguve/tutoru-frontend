@@ -7,6 +7,17 @@ import AuthContext from "../context/AuthContext"
 import SeccionEjercicios, { siteTitle } from "../components/SeccionEjercicios"
 import ListaEjercicios from "../components/categorias/ListaEjercicios"
 
+import { cargarNavItems } from "../lib/metadata"
+
+export async function getStaticProps() {
+  const navItems = await cargarNavItems()
+  return {
+    props: {
+      navItems
+    }
+  }
+}
+
 /*
 * Este Hook pide a Strapi los ejercicios que ha adquirido el usuario
 * y sus ordenes de compra, ambas de manera asincrona e independiente.
@@ -65,7 +76,7 @@ const useHistorialCompras = token => {
   }
 }
 
-export default function Cuenta() {
+export default function Cuenta({ navItems }) {
   const { user, loadingUser, token, logoutUser } = useContext(AuthContext)
 
   const {
@@ -75,14 +86,14 @@ export default function Cuenta() {
 
   if (!user && !loadingUser) {
     return (
-      <SeccionEjercicios>
+      <EstructuraPagina navItems={navItems}>
       <Head><title>{siteTitle} | Mi cuenta</title></Head>
       <h2 style={{textAlign: "center"}}>Inicia sesión para ver tu cuenta</h2>
-      </SeccionEjercicios>
+      </EstructuraPagina>
     )
   }
   return (
-    <SeccionEjercicios>
+    <EstructuraPagina navItems={navItems}>
       <Head><title>{siteTitle} | Mi cuenta</title></Head>
       <div>
         {
@@ -142,6 +153,6 @@ export default function Cuenta() {
         }
         <button onClick={() => logoutUser()}>logout</button>
       </div>
-    </SeccionEjercicios>
+    </EstructuraPagina>
   )
 }
