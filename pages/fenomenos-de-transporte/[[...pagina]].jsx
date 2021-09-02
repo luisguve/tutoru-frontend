@@ -28,7 +28,13 @@ export async function getStaticPaths() {
       raiz: h
     })
     return [...indice, ...subNivel]
-  }, [{params: {pagina: []}}])
+  }, [
+    {params: {pagina: []}},
+    // Se deben indexar las paginas de los ejercicios pertenencientes a la
+    // seccion raiz
+    ...(raiz.ejercicios.map(e => ({params: { pagina: [e] } }))
+    )
+  ])
 
   return {
     paths: [...indice],
@@ -44,12 +50,18 @@ export async function getStaticProps({ params }) {
   const indice = await getIndiceCategoria(categoria)
   // Indice de la categoria actual
   const categoriaActual = indiceCategoriaActual(indice, ruta)
-  // Resumen con la cantidad de ejercicios de la categoria actual
-  const resumen = await getResumenCategoria(categoriaActual.Titulo_url)
 
-  // Si hay ejercicios en la categoria, se deben buscar
-  if (categoriaActual.ejercicios.length) {
-    resumen.muestras.push(await getEjercicios(indice.Titulo_url))
+  // Si estamos en una categoria, se obtiene su resumen.
+  let resumen = null
+
+  if (categoriaActual) {
+    resumen = await getResumenCategoria(categoriaActual.Titulo_url)
+    // Si hay ejercicios en la categoria, se deben buscar
+    if (categoriaActual.ejercicios.length) {
+      resumen.muestras.push(...(await getEjercicios(categoriaActual.Titulo_url)))
+    }
+  } else {
+    // Pagina de ejercicio
   }
 
   // Construir los elementos del componente breadcrumb
@@ -57,7 +69,7 @@ export async function getStaticProps({ params }) {
     breadCrumb,
     tituloCabecera,
     metaSubtitulo,
-  } = buildBreadCrumb(indice, ruta)
+  } = await buildBreadCrumb(indice, ruta)
 
   return {
     props: {
@@ -88,18 +100,23 @@ export default function Pagina(props) {
     metaSubtitulo,
   } = props
 
-  const listaEjercicios = contenido.resumen.muestras.map(e => {
-    return (
-      <div key={e.slug}>
-        <Link href={`${router.asPath}/${e.slug}`}>
-          <a>
-            <h5>{e.titulo}</h5>
-          </a>
-        </Link>
-        <div dangerouslySetInnerHTML={{ __html: e.descripcion_corta}}></div>
-      </div>
-    )
-  })
+  let listaEjercicios
+
+  if (contenido.resumen) {
+    listaEjercicios = contenido.resumen.muestras.map(e => {
+      return (
+        <div key={e.slug}>
+          <Link href={`${router.asPath}/${e.slug}`}>
+            <a>
+              <h5>{e.titulo}</h5>
+            </a>
+          </Link>
+          <div dangerouslySetInnerHTML={{ __html: e.descripcion_corta}}></div>
+        </div>
+      )
+    })
+  }
+
 
   const subcategoriaRecursiva = ({parentUrl, subcategorias}) => {
     return subcategorias.map(s => {
@@ -137,13 +154,17 @@ export default function Pagina(props) {
     })
   }
 
+  let cabecera = contenido.resumen ?
+  `${tituloCabecera}: ${contenido.resumen.q} ejercicios` :
+  `${tituloCabecera}`
+
   return (
     <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb}>
       <Head>
         <title>{titulo} | {metaSubtitulo}</title>
       </Head>
 
-      <h3 className="text-center">{tituloCabecera}: {contenido.resumen.q} ejercicios</h3>
+      <h3 className="text-center">{cabecera}</h3>
       <div className="mt-4">
         {subcategorias}
       </div>
