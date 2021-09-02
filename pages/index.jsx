@@ -7,7 +7,7 @@ import { getCategorias } from "../lib/contenidos"
 import { titulo, cargarNavItems } from "../lib/metadata"
 
 export async function getStaticProps() {
-  const portadas = await getCategorias(0, 2)
+  const portadas = await getCategorias()
   const navItems = await cargarNavItems()
   return {
     props: {
@@ -42,7 +42,7 @@ export default function Home({ portadas, navItems }) {
         <div>
           <Link href={`/${Titulo_url}`}>
             <a>
-              <h2>{Titulo_normal} ({ejercicios.q} ejercicios)</h2>
+              <h3>{Titulo_normal} ({ejercicios.q} ejercicios)</h3>
               <img src={`http://localhost:1337${thumbnail.url}`} alt={thumbnail.alt} />
             </a>
           </Link>
