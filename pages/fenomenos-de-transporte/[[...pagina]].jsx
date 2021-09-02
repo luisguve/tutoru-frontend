@@ -48,25 +48,13 @@ export async function getStaticProps({ params }) {
   if (indice.ejercicios) {
     resumen.muestras.push(await getEjercicios(indice.Titulo_url))
   }
-  const cargarSubcategorias = async (c) => {
-    const resumen = await getResumenCategoria(c.Titulo_url)
-    let subcategoriasAnidadas = null
-    if (c.hijos.length) {
-      subcategoriasAnidadas = await Promise.all(c.hijos.map(c => cargarSubcategorias(c)))
-    }
-    return { resumen, presentacion: c, subcategoriasAnidadas }
-  }
 
-  let subcategorias = null
-  if (indice.hijos.length) {
-    subcategorias = await Promise.all(indice.hijos.map(c => cargarSubcategorias(c)))
-  }
   return {
     props: {
       contenido: {
         titulo: "Fenómenos de transporte",
         resumen,
-        subcategorias,
+        subcategorias: indice.hijos,
       },
       indice,
       ruta,
@@ -98,19 +86,24 @@ export default function Pagina(props) {
     )
   })
 
-  const subcategoriaRecursiva = (subcategorias) => {
-    if (!subcategorias) return null
+  const subcategoriaRecursiva = ({parentUrl, subcategorias}) => {
     return subcategorias.map(s => {
-      const { resumen, presentacion: pres, subcategoriasAnidadas } = s
+
+      const { hijos } = s
+
       let subcategorias = null
-      if (subcategoriasAnidadas) {
-        subcategorias = subcategoriaRecursiva(subcategoriasAnidadas)
+      if (hijos.length) {
+        subcategorias = subcategoriaRecursiva({
+          parentUrl: `${parentUrl}/${s.Titulo_url}`,
+          subcategorias: hijos
+        })
       }
-      return (<div key={pres.Titulo_url}>
+
+      return (<div key={s.Titulo_url}>
        <h4>
-         <Link href={router.asPath + "/" + pres.Titulo_url}>
-           <a className="ms-1">{pres.Titulo_normal} {
-             !subcategorias && `(${pres.ejercicios.length})`
+         <Link href={`${parentUrl}/${s.Titulo_url}`}>
+           <a className="ms-1">{s.Titulo_normal} {
+             !subcategorias && `(${s.ejercicios.length})`
            }</a>
          </Link>
          {
@@ -122,8 +115,11 @@ export default function Pagina(props) {
   }
 
   let { subcategorias } = contenido
-  if (subcategorias) {
-    subcategorias = subcategoriaRecursiva(subcategorias)
+  if (subcategorias.length) {
+    subcategorias = subcategoriaRecursiva({
+      parentUrl: router.asPath,
+      subcategorias
+    })
   }
 
   return (
@@ -131,6 +127,7 @@ export default function Pagina(props) {
       <Head>
         <title>{titulo} | {metaSubtitulo}</title>
       </Head>
+
       <h3 className="text-center">{tituloCabecera}: {contenido.resumen.muestras.length} ejercicios</h3>
       <div className="mt-4">
         {subcategorias}
