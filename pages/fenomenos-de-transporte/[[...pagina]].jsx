@@ -9,6 +9,7 @@ import {
   getEjercicios,
   buildBreadCrumb,
   getResumenCategoria,
+  indiceCategoriaActual,
 } from "../../lib/contenidos"
 import EstructuraPagina from "../../components/EstructuraPagina"
 import PaginaCategoria from "../../components/categorias/PaginaCategoria"
@@ -41,24 +42,33 @@ export async function getStaticProps({ params }) {
   const navItems = await cargarNavItems()
   // Indice para construir el breadcrumb y el contenido de cada seccion
   const indice = await getIndiceCategoria(categoria)
-  // Resumen con la cantidad de ejercicios de la seccion
-  const resumen = await getResumenCategoria(indice.Titulo_url)
+  // Indice de la categoria actual
+  const categoriaActual = indiceCategoriaActual(indice, ruta)
+  // Resumen con la cantidad de ejercicios de la categoria actual
+  const resumen = await getResumenCategoria(categoriaActual.Titulo_url)
 
   // Si hay ejercicios en la categoria, se deben buscar
-  if (indice.ejercicios) {
+  if (categoriaActual.ejercicios.length) {
     resumen.muestras.push(await getEjercicios(indice.Titulo_url))
   }
+
+  // Construir los elementos del componente breadcrumb
+  const {
+    breadCrumb,
+    tituloCabecera,
+    metaSubtitulo,
+  } = buildBreadCrumb(indice, ruta)
 
   return {
     props: {
       contenido: {
-        titulo: "Fenómenos de transporte",
         resumen,
-        subcategorias: indice.hijos,
       },
-      indice,
-      ruta,
+      indice: categoriaActual,
       navItems,
+      breadCrumb,
+      tituloCabecera,
+      metaSubtitulo,
     }
   }
 }
@@ -69,9 +79,14 @@ export async function getStaticProps({ params }) {
 */
 export default function Pagina(props) {
   const router = useRouter()
-  const { contenido, indice, ruta, navItems } = props
-
-  const {breadCrumb, tituloCabecera, metaSubtitulo} = buildBreadCrumb(indice, ruta)
+  const {
+    contenido,
+    indice,
+    navItems,
+    breadCrumb,
+    tituloCabecera,
+    metaSubtitulo,
+  } = props
 
   const listaEjercicios = contenido.resumen.muestras.map(e => {
     return (
@@ -114,11 +129,11 @@ export default function Pagina(props) {
     })
   }
 
-  let { subcategorias } = contenido
-  if (subcategorias.length) {
+  let subcategorias = null
+  if (indice && indice.hijos.length) {
     subcategorias = subcategoriaRecursiva({
       parentUrl: router.asPath,
-      subcategorias
+      subcategorias: indice.hijos
     })
   }
 
@@ -128,7 +143,7 @@ export default function Pagina(props) {
         <title>{titulo} | {metaSubtitulo}</title>
       </Head>
 
-      <h3 className="text-center">{tituloCabecera}: {contenido.resumen.muestras.length} ejercicios</h3>
+      <h3 className="text-center">{tituloCabecera}: {contenido.resumen.q} ejercicios</h3>
       <div className="mt-4">
         {subcategorias}
       </div>
