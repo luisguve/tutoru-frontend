@@ -10,7 +10,7 @@ import Header from "./header"
 
 import { titulo } from "../lib/metadata"
 
-export default function Layout({ children, isHome, categoria, navItems }) {
+export default function Layout({ children, isHome, breadCrumb, navItems }) {
   return (
     <div>
       <Head>
@@ -29,22 +29,37 @@ export default function Layout({ children, isHome, categoria, navItems }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Header isHome={isHome} navItems={navItems} />
-      <main className={styles.container}>
-        <Breadcrumb isHome={isHome} categoria={categoria} />
-        {children}
-      </main>
+      <div className="container-lg">
+        <Breadcrumb isHome={isHome} elements={breadCrumb} />
+        <main className={styles.container}>
+          {children}
+        </main>
+      </div>
       <Footer />
     </div>
   )
 }
 
-const Breadcrumb = ({categoria, isHome}) => {
-  if (categoria) {
+const Breadcrumb = ({elements, isHome}) => {
+  if (elements) {
+    const links = elements.map((e, i) => {
+      return (
+        <span key={e.url + e.name}>
+          {
+            i < elements.length - 1 ?
+            <Link href={e.url}>
+              <a>{e.name}</a>
+            </Link>
+            :
+            <strong>{e.name}</strong>
+          }
+          <span className="mx-1">{ i < elements.length - 1 && "»" }</span>
+        </span>
+      )
+    })
     return (
       <div className={styles.backToHome}>
-        <Link href={`/${categoria.Titulo_url}`}>
-          <a>← Volver a {categoria.Titulo_normal}</a>
-        </Link>
+        {links}
       </div>
     )
   }
