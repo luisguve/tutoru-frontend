@@ -7,6 +7,7 @@ import { titulo } from "../../lib/metadata"
 import EstructuraPagina from "../EstructuraPagina"
 import PaginaCategoria from "./PaginaCategoria"
 import PaginaEjercicio from "./PaginaEjercicio"
+import Subcategorias from "./Subcategorias"
 
 export default function Categoria({props}) {
   const router = useRouter()
@@ -37,42 +38,6 @@ export default function Categoria({props}) {
     })
   }
 
-  const subcategoriaRecursiva = ({parentUrl, subcategorias}) => {
-    return subcategorias.map(s => {
-
-      const { hijos } = s
-
-      let subcategorias = null
-      if (hijos.length) {
-        subcategorias = subcategoriaRecursiva({
-          parentUrl: `${parentUrl}/${s.Titulo_url}`,
-          subcategorias: hijos
-        })
-      }
-
-      return (<div key={s.Titulo_url}>
-       <h4>
-         <Link href={`${parentUrl}/${s.Titulo_url}`}>
-           <a className="ms-1">{s.Aria_label || s.Titulo_normal} {
-             !subcategorias && `(${s.ejercicios.length})`
-           }</a>
-         </Link>
-         {
-           subcategorias && <div className="ms-4">{subcategorias}</div>
-         }
-       </h4>
-      </div>)
-    })
-  }
-
-  let subcategorias = null
-  if (esCategoria && indice.hijos.length) {
-    subcategorias = subcategoriaRecursiva({
-      parentUrl: router.asPath,
-      subcategorias: indice.hijos
-    })
-  }
-
   const cabecera = contenido.resumen ?
   `${tituloCabecera}: ${contenido.resumen.q} ejercicios` :
   `${tituloCabecera}`
@@ -84,9 +49,12 @@ export default function Categoria({props}) {
       </Head>
 
       <h3 className="text-center">{cabecera}</h3>
-      <div className="mt-4">
-        {subcategorias}
-      </div>
+      {
+        (esCategoria && (indice.hijos.length > 0)) &&
+        <div className="mt-4">
+          <Subcategorias parentUrl={router.asPath} subcategorias={indice.hijos} />
+        </div>
+      }
       <div className="mt-4">
         {listaEjercicios}
         {
