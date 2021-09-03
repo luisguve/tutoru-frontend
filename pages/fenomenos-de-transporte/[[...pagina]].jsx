@@ -1,10 +1,11 @@
+import path from "path"
 import { getCategoriaPaths, getCategoriaProps } from "../../lib/categoriaSetup"
 
 import Categoria from "../../components/categorias"
 
-const categoria = "fenomenos-de-transporte"
+const categoria = __dirname.split(path.sep).pop()
 
-export async function getStaticPaths() {
+export async function getStaticPaths() {  
   const {paths} = await getCategoriaPaths({categoria})
   return {
     paths,
