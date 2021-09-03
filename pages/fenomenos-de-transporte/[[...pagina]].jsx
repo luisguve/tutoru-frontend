@@ -4,7 +4,7 @@ import Link from "next/link"
 
 import {
   getIndiceCategoria,
-  getPagina,
+  getEjercicio,
   construirIndice,
   getEjercicios,
   buildBreadCrumb,
@@ -49,19 +49,22 @@ export async function getStaticProps({ params }) {
   // Indice para construir el breadcrumb y el contenido de cada seccion
   const indice = await getIndiceCategoria(categoria)
   // Indice de la categoria actual
-  const categoriaActual = indiceCategoriaActual(indice, ruta)
+  const { categoriaActual, esCategoria } = indiceCategoriaActual(indice, ruta)
 
   // Si estamos en una categoria, se obtiene su resumen.
   let resumen = null
+  // Sino, estamos en una pagina de ejercicio. Se obtiene su contenido.
+  let ejercicio = null
 
-  if (categoriaActual) {
+  if (esCategoria) {
     resumen = await getResumenCategoria(categoriaActual.Titulo_url)
     // Si hay ejercicios en la categoria, se deben buscar
     if (categoriaActual.ejercicios.length) {
       resumen.muestras.push(...(await getEjercicios(categoriaActual.Titulo_url)))
     }
   } else {
-    // Pagina de ejercicio
+    const slug = ruta[ruta.length -1]
+    ejercicio = await getEjercicio(categoriaActual.Titulo_url, slug)
   }
 
   // Construir los elementos del componente breadcrumb
@@ -75,8 +78,10 @@ export async function getStaticProps({ params }) {
     props: {
       contenido: {
         resumen,
+        ejercicio,
       },
       indice: categoriaActual,
+      esCategoria,
       navItems,
       breadCrumb,
       tituloCabecera,
@@ -94,6 +99,7 @@ export default function Pagina(props) {
   const {
     contenido,
     indice,
+    esCategoria,
     navItems,
     breadCrumb,
     tituloCabecera,
@@ -117,7 +123,6 @@ export default function Pagina(props) {
     })
   }
 
-
   const subcategoriaRecursiva = ({parentUrl, subcategorias}) => {
     return subcategorias.map(s => {
 
@@ -134,7 +139,7 @@ export default function Pagina(props) {
       return (<div key={s.Titulo_url}>
        <h4>
          <Link href={`${parentUrl}/${s.Titulo_url}`}>
-           <a className="ms-1">{s.Titulo_normal} {
+           <a className="ms-1">{s.Aria_label || s.Titulo_normal} {
              !subcategorias && `(${s.ejercicios.length})`
            }</a>
          </Link>
@@ -147,14 +152,14 @@ export default function Pagina(props) {
   }
 
   let subcategorias = null
-  if (indice && indice.hijos.length) {
+  if (esCategoria && indice.hijos.length) {
     subcategorias = subcategoriaRecursiva({
       parentUrl: router.asPath,
       subcategorias: indice.hijos
     })
   }
 
-  let cabecera = contenido.resumen ?
+  const cabecera = contenido.resumen ?
   `${tituloCabecera}: ${contenido.resumen.q} ejercicios` :
   `${tituloCabecera}`
 
@@ -170,6 +175,10 @@ export default function Pagina(props) {
       </div>
       <div className="mt-4">
         {listaEjercicios}
+        {
+          contenido.ejercicio &&
+          <div dangerouslySetInnerHTML={{ __html: contenido.ejercicio.descripcion_corta}}></div>
+        }
       </div>
     </EstructuraPagina>
   )
