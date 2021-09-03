@@ -60,7 +60,14 @@ export async function getStaticProps({ params }) {
     resumen = await getResumenCategoria(categoriaActual.Titulo_url)
     // Si hay ejercicios en la categoria, se deben buscar
     if (categoriaActual.ejercicios.length) {
-      resumen.muestras.push(...(await getEjercicios(categoriaActual.Titulo_url)))
+      let ejercicios = await getEjercicios(categoriaActual.Titulo_url)
+      // Excluir los ejercicios de muestra
+      if (resumen.muestras.length) {
+        ejercicios = ejercicios.filter(e => {
+          return !resumen.muestras.find(m => m.slug === e.slug)
+        })
+      }
+      resumen.muestras.push(...ejercicios)
     }
   } else {
     const slug = ruta[ruta.length -1]
