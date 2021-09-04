@@ -5,7 +5,7 @@ import Head from "next/head"
 import { API_URL } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import SeccionEjercicios, { siteTitle } from "../components/SeccionEjercicios"
-import ListaEjercicios from "../components/categorias/ListaEjercicios"
+import ListaEjerciciosClasificados from "../components/categorias/ListaEjerciciosClasificados"
 
 import { cargarNavItems } from "../lib/metadata"
 
@@ -119,7 +119,7 @@ export default function Cuenta({ navItems }) {
           :
             <div>
               <h2 style={{textAlign: "center"}}>Tus ejercicios</h2>
-              <ListaEjercicios irSolucion={true} muestras={ejercicios} />
+              <ListaEjerciciosClasificados irSolucion={true} muestras={ejercicios} />
             </div>
         }
         {
