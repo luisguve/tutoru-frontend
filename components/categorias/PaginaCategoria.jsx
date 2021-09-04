@@ -1,27 +1,44 @@
-import Head from "next/head"
+import { useRouter } from "next/router"
 
-import { siteTitle } from "../../lib/metadata"
-import EstructuraPagina from "../EstructuraPagina"
+import Subcategorias from "./Subcategorias"
 import ListaEjercicios from "./ListaEjercicios"
-import utilStyles from "../../styles/utils.module.css"
 
-/*
-* Este componente muestra una lista de ejercicios dentro de una categoria.
+/**
+* Este componente muestra una lista de ejercicios dentro de una categoria asi como su
+* indice con subcategorias.
 */
-export default function PaginaCategoria({ contenido }) {
-  // Obtiene el titulo de la categoria del primer contenido
-  const { categoria: { Titulo_normal } } = contenido[0]
+export default function PaginaCategoria(props) {
+  const {
+    subcategorias,
+    muestras
+  } = props
+  const router = useRouter()
+/*
+  const listaEjercicios = muestras.map(e => {
+    return (
+      <div key={e.slug}>
+        <Link href={`${router.asPath}/${e.slug}`}>
+          <a>
+            <h5>{e.titulo}</h5>
+          </a>
+        </Link>
+        <div dangerouslySetInnerHTML={{ __html: e.descripcion_corta}}></div>
+      </div>
+    )
+  })*/
+
   return (
-    <EstructuraPagina>
-      <Head>
-        <title>{siteTitle} | {Titulo_normal}</title>
-      </Head>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <ListaEjercicios
-          irSolucion={false}
-          contenido={contenido}
-        />
-      </section>
-    </EstructuraPagina>
+    <section>
+      {
+        (subcategorias.length > 0) &&
+        <div className="mt-4">
+          <Subcategorias parentUrl={router.asPath} subcategorias={subcategorias} />
+        </div>
+      }
+      <ListaEjercicios
+        irSolucion={false}
+        muestras={muestras}
+      />
+    </section>
   )
 }

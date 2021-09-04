@@ -7,7 +7,7 @@ import EjerciciosContext from "../../context/EjerciciosContext"
 import BotonAgregarCarrito from "../BotonAgregarCarrito"
 import { API_URL } from "../../lib/urls"
 
-/*
+/**
 * Este Hook verifica si el ejercicio esta en la lista de ejercicios que ha
 * comprado el usuario, y si está, muestra el link para pide la solucion a
 * ver la solucion o directamente la pide a Strapi, dependiendo del parametro
@@ -69,7 +69,7 @@ const useSolucion = (id, enSeccion, irSolucion) => {
   }
 }
 
-/*
+/**
 * Este componente muestra la descripcion del ejercicio y un boton de compra
 * o un link a su solucion si el usuario ha comprado el ejercicio
 * o su precio junto con un link a login si el usuario no ha iniciado sesion.

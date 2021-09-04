@@ -119,7 +119,7 @@ export default function Cuenta({ navItems }) {
           :
             <div>
               <h2 style={{textAlign: "center"}}>Tus ejercicios</h2>
-              <ListaEjercicios irSolucion={true} contenido={ejercicios} />
+              <ListaEjercicios irSolucion={true} muestras={ejercicios} />
             </div>
         }
         {

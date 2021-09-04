@@ -6,7 +6,6 @@ import Categoria from "../../components/categorias"
 const categoria = __dirname.split(path.sep).pop()
 
 export async function getStaticPaths() {
-  console.log(categoria)
   const {paths} = await getCategoriaPaths({categoria})
   return {
     paths,
