@@ -22,15 +22,12 @@ export default function Categoria({props}) {
     metaSubtitulo,
   } = props
 
-  const cabecera = contenido.resumen ?
-  `${tituloCabecera}: ${contenido.resumen.q} ejercicios` :
-  `${tituloCabecera}`
-
   // Categoria o ejercicio?
   const componente = esCategoria ?
   <PaginaCategoria
+    titulo={indice.Titulo_normal}
     subcategorias={indice.hijos}
-    muestras={contenido.resumen.muestras}
+    resumen={contenido.resumen}
   />
   :
   <Ejercicio
