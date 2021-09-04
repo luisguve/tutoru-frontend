@@ -80,7 +80,16 @@ const useSolucion = (id, enSeccion, irSolucion) => {
 */
 const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
 
-  const { id, slug, titulo, categoria, descripcion, descripcion_corta, precio } = contenido
+  const {
+    id,
+    slug,
+    precio,
+    titulo,
+    categoria,
+    descripcion,
+    arbolCategorias,
+    descripcion_corta,
+  } = contenido
 
   const {
     solucionDisponible,
@@ -91,7 +100,8 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
   const { loadingIDsEjercicios } = useContext(EjerciciosContext)
   const { user, loadingUser } = useContext(AuthContext)
 
-  const ejercicioURL = `/${categoria.Titulo_url}/${slug}`
+  const baseURL = arbolCategorias.join("/")
+  const ejercicioURL = `/${baseURL}/${slug}`
 
   return (
     <div>
