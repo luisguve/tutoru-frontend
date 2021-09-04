@@ -9,35 +9,24 @@ import ListaEjercicios from "./ListaEjercicios"
 */
 export default function PaginaCategoria(props) {
   const {
+    titulo,
     subcategorias,
-    muestras
+    resumen
   } = props
   const router = useRouter()
-/*
-  const listaEjercicios = muestras.map(e => {
-    return (
-      <div key={e.slug}>
-        <Link href={`${router.asPath}/${e.slug}`}>
-          <a>
-            <h5>{e.titulo}</h5>
-          </a>
-        </Link>
-        <div dangerouslySetInnerHTML={{ __html: e.descripcion_corta}}></div>
-      </div>
-    )
-  })*/
 
   return (
     <section>
+      <h3>{titulo}: {resumen.q} ejercicios</h3>
       {
         (subcategorias.length > 0) &&
-        <div className="mt-4">
+        <div className="my-4">
           <Subcategorias parentUrl={router.asPath} subcategorias={subcategorias} />
         </div>
       }
       <ListaEjercicios
         irSolucion={false}
-        muestras={muestras}
+        muestras={resumen.muestras}
       />
     </section>
   )
