@@ -17,7 +17,7 @@ export default function PaginaCategoria(props) {
 
   return (
     <section>
-      <h3>{titulo}: {resumen.q} ejercicios</h3>
+      <h2 className="text-center">{titulo}: {resumen.q} ejercicios</h2>
       {
         (subcategorias.length > 0) &&
         <div className="my-4">

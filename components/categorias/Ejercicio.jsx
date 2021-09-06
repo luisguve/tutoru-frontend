@@ -6,6 +6,7 @@ import AuthContext from "../../context/AuthContext"
 import EjerciciosContext from "../../context/EjerciciosContext"
 import BotonAgregarCarrito from "../BotonAgregarCarrito"
 import { API_URL } from "../../lib/urls"
+import utilStyles from "../../styles/utils.module.css"
 
 /**
 * Este Hook verifica si el ejercicio esta en la lista de ejercicios que ha
@@ -104,69 +105,67 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
   const ejercicioURL = `/${baseURL}/${slug}`
 
   return (
-    <div>
+    <>
       {
         enSeccion ? // Estamos en la pagina de la categoria (list)
-          <div>
+          <>
             <Link href={ejercicioURL}><a>{titulo}</a></Link>
-            <div dangerouslySetInnerHTML={{ __html: descripcion_corta}}></div>
-          </div>
+            <div className={utilStyles.ejercicioContent} dangerouslySetInnerHTML={{ __html: descripcion_corta}}></div>
+          </>
         : // Estamos en la pagina del ejercicio (single page)
-          <div>
-            <h2>{titulo}</h2>
-            <div dangerouslySetInnerHTML={{ __html: descripcion}}></div>
-          </div>
+          <>
+            <h2 className="text-center">{titulo}</h2>
+            <div className={utilStyles.ejercicioContent} dangerouslySetInnerHTML={{ __html: descripcion}}></div>
+          </>
       }
-      <div>
-        {
-          (!user && !loadingUser) ? // No hay sesion activa
-            <div>
-              <strong>${precio}</strong>
-              {
-                !enSeccion &&
-                <div>
-                  <Link href="/login">
-                    <a>Inicia sesión para comprar este ejercicio</a>
-                  </Link>
-                </div>
-              }
-            </div>
-          :
-            (loadingUser || loadingIDsEjercicios) && !solucionDisponible ?
-              // El usuario esta cargando
+      {
+        (!user && !loadingUser) ? // No hay sesion activa
+          <>
+            <strong>${precio}</strong>
+            {
+              !enSeccion &&
               <div>
-                <strong>${precio}</strong> 
-                <p>Cargando usuario...</p>
+                <Link href="/login">
+                  <a>Inicia sesión para comprar este ejercicio</a>
+                </Link>
               </div>
-            :
-              solucionDisponible ?
-                // El usuario adquirió este ejercicio
-                enSeccion ?
-                  // Estamos en la seccion (list)
-                  <div>
-                    <Link href={`${ejercicioURL}#solucion`}>
-                      <a>Ver solución</a>
-                    </Link>
-                  </div>
-                :
-                  // Estamos en la propia pagina del ejercicio
-                  loadingSolucion ?
-                    <h3 style={{textAlign: "center"}}>Cargando solucion...</h3>
-                  :
-                    data &&
-                    <>
-                      <h3 id="solucion" style={{textAlign: "center"}}>Solucion</h3>
-                      <div dangerouslySetInnerHTML={{ __html: data.solucion}}></div>
-                    </>
+            }
+          </>
+        :
+          (loadingUser || loadingIDsEjercicios) && !solucionDisponible ?
+            // El usuario esta cargando
+            <>
+              <strong>${precio}</strong> 
+              <p>Cargando usuario...</p>
+            </>
+          :
+            solucionDisponible ?
+              // El usuario adquirió este ejercicio
+              enSeccion ?
+                // Estamos en la seccion (list)
+                <>
+                  <Link href={`${ejercicioURL}#solucion`}>
+                    <a>Ver solución</a>
+                  </Link>
+                </>
               :
-                // El usuario no tiene acceso a la solucion de este ejercicio
-                <div>
-                  <p><strong>${precio}</strong></p>
-                  <div><BotonAgregarCarrito ejercicio={contenido} /></div>
-                </div>
-        }
-      </div>
-    </div>
+                // Estamos en la propia pagina del ejercicio
+                loadingSolucion ?
+                  <h3 className="text-center">Cargando solucion...</h3>
+                :
+                  data &&
+                  <>
+                    <h3 id="solucion" className="text-center">Solucion</h3>
+                    <div dangerouslySetInnerHTML={{ __html: data.solucion}}></div>
+                  </>
+            :
+              // El usuario no tiene acceso a la solucion de este ejercicio
+              <>
+                <p><strong>${precio}</strong></p>
+                <div><BotonAgregarCarrito ejercicio={contenido} /></div>
+              </>
+      }
+    </>
   )
 }
 

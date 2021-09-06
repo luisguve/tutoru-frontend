@@ -2,22 +2,27 @@ import Head from 'next/head'
 import Link from "next/link"
 
 import EstructuraPagina from '../components/EstructuraPagina'
+import ListaEjercicios from '../components/categorias/ListaEjercicios'
 import utilStyles from '../styles/utils.module.css'
 import { getCategorias } from "../lib/contenidos"
-import { titulo, cargarNavItems } from "../lib/metadata"
+import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
 
 export async function getStaticProps() {
   const portadas = await getCategorias()
   const navItems = await cargarNavItems()
+  const informacionSitio = await cargarInformacionSitio()
   return {
     props: {
       portadas,
-      navItems
+      navItems,
+      informacionSitio,
     }
   }
 }
 
-export default function Home({ portadas, navItems }) {
+export default function Home(props) {
+  const { portadas, navItems, informacionSitio } = props
+
   const listaPortadas = portadas.map((datos) => {
     const {
       Titulo_url,
@@ -25,41 +30,44 @@ export default function Home({ portadas, navItems }) {
       thumbnail,
       ejercicios
     } = datos
-    const listaEjercicios = ejercicios.planteamientos.map(p => {
-      return (
-        <div key={p.slug}>
-          <Link href={`/${Titulo_url}/${p.slug}`}>
-            <a>
-              <h5>{p.titulo}</h5>
-            </a>
-          </Link>
-          <div dangerouslySetInnerHTML={{ __html: p.descripcion_corta}}></div>
-        </div>
-      )
-    })
+
+    const thumbnailClass = ejercicios.planteamientos.length ? "float-start" : "d-flex justify-content-center"
+
     return (
-      <li className={utilStyles.listItem} key={Titulo_url}>
-        <div>
+      <li className="mb-2 clearfix" key={Titulo_url}>
+        <Link href={`/${Titulo_url}`}>
+          <a>
+            <h3 className="text-center">{Titulo_normal} ({ejercicios.q} ejercicios)</h3>
+          </a>
+        </Link>
+        <div className={thumbnailClass.concat(" me-1")}>
           <Link href={`/${Titulo_url}`}>
             <a>
-              <h3>{Titulo_normal} ({ejercicios.q} ejercicios)</h3>
               <img src={`http://localhost:1337${thumbnail.url}`} alt={thumbnail.alt} />
             </a>
           </Link>
         </div>
-        <div>
-          {listaEjercicios}
-        </div>
+        <ListaEjercicios irSolucion={false} muestras={ejercicios.planteamientos} />
       </li>
     )
   })
   return (
-    <EstructuraPagina isHome={true} navItems={navItems}>
+    <EstructuraPagina
+      isHome={true}
+      navItems={navItems}
+      titulo={informacionSitio.Titulo_sitio}
+      subtitulo={informacionSitio.Subtitulo_sitio}
+    >
       <Head>
-        <title>{titulo}</title>
+        <title>{informacionSitio.Titulo_sitio}</title>
       </Head>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Ejercicios de ingenieria</h2>
+      <section className="p-1">
+        <h2 className="text-center">
+          {informacionSitio.Titulo_home}
+        </h2>
+        <p>
+          {informacionSitio.Descripcion}
+        </p>
         <ul className={utilStyles.list}>
           {listaPortadas}
         </ul>

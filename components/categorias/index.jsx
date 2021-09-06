@@ -1,8 +1,6 @@
 import Head from "next/head"
 import Link from "next/link"
 
-import { titulo } from "../../lib/metadata"
-
 import EstructuraPagina from "../EstructuraPagina"
 import Subcategorias from "./Subcategorias"
 import PaginaCategoria from "./PaginaCategoria"
@@ -20,6 +18,7 @@ export default function Categoria({props}) {
     breadCrumb,
     tituloCabecera,
     metaSubtitulo,
+    informacionSitio: { Titulo_sitio: titulo },
   } = props
 
   // Categoria o ejercicio?
@@ -36,7 +35,7 @@ export default function Categoria({props}) {
   />
 
   return (
-    <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb}>
+    <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb} titulo={titulo}>
       <Head>
         <title>{titulo} | {metaSubtitulo}</title>
       </Head>

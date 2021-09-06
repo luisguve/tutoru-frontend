@@ -1,5 +1,7 @@
 import Ejercicio from "./Ejercicio"
 
+import utilStyles from "../../styles/utils.module.css"
+
 /**
 * Este componente muestra los ejercicios que recibe como muestras.
 * 
@@ -20,7 +22,7 @@ const ListaEjercicios = ({ muestras, irSolucion }) => {
     )
   })
 
-  return <ul>{grupo}</ul>
+  return <ul className={utilStyles.list}>{grupo}</ul>
 }
 
 export default ListaEjercicios

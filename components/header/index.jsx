@@ -1,50 +1,53 @@
 import { useEffect } from "react"
 
 import styles from "../../styles/Header.module.scss"
-import { titulo } from "../../lib/metadata"
 
 import Menu from "./Menu"
 
 export default function Header(props) {
-  const { isHome, navItems } = props
+  const { isHome, navItems, titulo, subtitulo } = props
   return (
     <>
       <header className={styles.Header}>
         {isHome ? (
-          <HeaderInicio />
+          <HeaderInicio titulo={titulo} subtitulo={subtitulo} />
         ) : (
-          <HeaderPagina />
+          <HeaderPagina titulo={titulo} />
         )}
       </header>
-      <Navbar navItems={navItems} />
+      <Navbar navItems={navItems} titulo={titulo} />
     </>
   )
 }
 
-const HeaderInicio = () => {
+const HeaderInicio = (props) => {
   return (
     <div className={styles.Header__Inicio}>
-      <Contenido />
+      <Contenido {...props} />
     </div>
   )
 }
-const HeaderPagina = () => {
+const HeaderPagina = (props) => {
   return (
     <div className={styles.Header__Pagina}>
-      <Contenido />
+      <Contenido {...props} />
     </div>
   )
 }
 
-const Contenido = () => {
+const Contenido = ({titulo, subtitulo}) => {
   return (
     <div className={styles.Contenido}>
       <h1>{titulo}</h1>
+      {
+        subtitulo &&
+        <em>{subtitulo}</em>
+      }
     </div>
   )
 }
 
-const Navbar = ({ navItems }) => {
+const Navbar = ({ navItems, titulo }) => {
 
   useEffect(() => {
     // close all inner dropdowns when parent is closed
