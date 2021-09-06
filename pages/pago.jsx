@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useContext, useState, useEffect } from "react"
 import { useToasts } from "react-toast-notifications"
 
-import { API_URL } from "../lib/urls"
+import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import SeccionEjercicios from "../components/SeccionEjercicios"
 
@@ -31,7 +31,7 @@ const useOrder = (confirmante) => {
         try {
           setLoading(true)
           addToast("Confirmando pago", {appearance: "info"})
-          const orderUrl = `${API_URL}/orders/confirm`
+          const orderUrl = `${STRAPI}/orders/confirm`
           const order_res = await fetch(orderUrl, {
             method: "POST",
             headers: {

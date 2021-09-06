@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react"
 import Link from "next/link"
 import Head from "next/head"
 
-import { API_URL } from "../lib/urls"
+import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import SeccionEjercicios, { siteTitle } from "../components/SeccionEjercicios"
 import ListaEjerciciosClasificados from "../components/categorias/ListaEjerciciosClasificados"
@@ -33,7 +33,7 @@ const useHistorialCompras = token => {
     const fetchOrders = async token => {
       try {
         setLoadingOrders(true)
-        const ordersUrl = `${API_URL}/orders`
+        const ordersUrl = `${STRAPI}/orders`
         const orders_res = await fetch(ordersUrl, {
           headers: {
             "Authorization": `Bearer ${token}`
@@ -50,7 +50,7 @@ const useHistorialCompras = token => {
     const fetchEjercicios = async token => {
       try {
         setLoadingEjercicios(true)
-        const ejerciciosUrl = `${API_URL}/ejercicios/comprados`
+        const ejerciciosUrl = `${STRAPI}/ejercicios/comprados`
         const ejercicios_res = await fetch(ejerciciosUrl, {
           headers: {
             "Authorization": `Bearer ${token}`

@@ -5,7 +5,7 @@ import Link from "next/link"
 import AuthContext from "../../context/AuthContext"
 import EjerciciosContext from "../../context/EjerciciosContext"
 import BotonAgregarCarrito from "../BotonAgregarCarrito"
-import { API_URL } from "../../lib/urls"
+import { STRAPI } from "../../lib/urls"
 import utilStyles from "../../styles/utils.module.css"
 
 /**
@@ -27,7 +27,7 @@ const useSolucion = (id, enSeccion, irSolucion) => {
     const fetchSolucion = async (id, token) => {
       try {
         addToast("Obteniendo solucion", { appearance: "info" })
-        const solucionUrl = `${API_URL}/solucion/${id}`
+        const solucionUrl = `${STRAPI}/solucion/${id}`
         const solucion_res = await fetch(solucionUrl, {
           headers: {
             "Authorization": `Bearer ${token}`

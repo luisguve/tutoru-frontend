@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react"
 import { useToasts } from "react-toast-notifications"
 
 import AuthContext from "./AuthContext"
-import { API_URL } from "../lib/urls"
+import { STRAPI } from "../lib/urls"
 
 const EjerciciosContext = createContext()
 
@@ -19,7 +19,7 @@ export function EjerciciosProvider({children}) {
         addToast("Obteniendo IDs de ejercicios comprados", { appearance: 'info' })
         setLoading(true)
 
-        const ejerciciosUrl = `${API_URL}/ejercicios/comprados-ids`
+        const ejerciciosUrl = `${STRAPI}/ejercicios/comprados-ids`
         const ejercicios_res = await fetch(ejerciciosUrl, {
           headers: {
             "Authorization": `Bearer ${token}`

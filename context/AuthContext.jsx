@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { Magic } from "magic-sdk"
 import { useToasts } from 'react-toast-notifications';
 
-import { API_URL, MAGIC_PUBLIC_KEY } from "../lib/urls"
+import { STRAPI, MAGIC_PUBLIC_KEY } from "../lib/urls"
 
 const AuthContext = createContext()
 

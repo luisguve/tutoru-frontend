@@ -6,7 +6,7 @@ import AuthContext from "../context/AuthContext"
 import CarritoContext from "../context/CarritoContext"
 import { limpiarSesion as limparEjerciciosComprados } from "../context/EjerciciosContext"
 import styles from "../styles/Carrito.module.css"
-import { STRIPE_PK, API_URL } from "../lib/urls"
+import { STRIPE_PK, STRAPI } from "../lib/urls"
 
 // const stripePromise = loadStripe(STRIPE_PK)
 
@@ -151,7 +151,7 @@ const Checkout = props => {
     try {
       const stripe = await stripePromise
 
-      const orderUrl = `${API_URL}/orders`
+      const orderUrl = `${STRAPI}/orders`
       const orderOptions = {
         method: "POST",
         headers: {

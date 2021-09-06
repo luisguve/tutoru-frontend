@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js"
 import { useToasts } from "react-toast-notifications"
 
 import AuthContext from "../context/AuthContext"
-import { STRIPE_PK, API_URL } from "../lib/urls"
+import { STRIPE_PK, STRAPI } from "../lib/urls"
 
 const stripePromise = loadStripe(STRIPE_PK)
 
@@ -22,7 +22,7 @@ export default function BotonComprar({ ejercicio }) {
     try {
       const stripe = await stripePromise
 
-      const orderUrl = `${API_URL}/orders`
+      const orderUrl = `${STRAPI}/orders`
       const orderOptions = {
         method: "POST",
         headers: {
