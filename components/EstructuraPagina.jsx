@@ -15,24 +15,27 @@ export default function EstructuraPagina(props) {
     navItems,
     titulo,
     subtitulo,
+    header,
   } = props
   return (
-    <div>
-      <Head>
-        <link rel="icon" href="/favicon.ico" />
-        <meta
-          name="description"
-          content="Learn how to build a personal website using Next.js"
-        />
-        <meta name="og:title" content={titulo} />
-        <meta name="twitter:card" content="summary_large_image" />
-      </Head>
-      <Header isHome={isHome} navItems={navItems} titulo={titulo} subtitulo={subtitulo} />
-      <div className="container-lg">
-        <Breadcrumb isHome={isHome} elements={breadCrumb} />
-        <main className={styles.container}>
-          {children}
-        </main>
+    <div className="min-vh-100 d-flex flex-column justify-content-between">
+      <div className="contenido">
+        <Head>
+          <link rel="icon" href="/favicon.ico" />
+          <meta
+            name="description"
+            content="Learn how to build a personal website using Next.js"
+          />
+          <meta name="og:title" content={header} />
+          <meta name="twitter:card" content="summary_large_image" />
+        </Head>
+        <Header isHome={isHome} navItems={navItems} titulo={titulo} header={header} subtitulo={subtitulo} />
+        <div className="container-lg">
+          <Breadcrumb isHome={isHome} elements={breadCrumb} />
+          <main className={styles.container}>
+            {children}
+          </main>
+        </div>
       </div>
       <Footer />
     </div>
@@ -57,14 +60,14 @@ const Breadcrumb = ({elements, isHome}) => {
       )
     })
     return (
-      <div className={styles.backToHome}>
+      <div className="mt-3 mt-md-5">
         {links}
       </div>
     )
   }
   if (!isHome) {
     return (
-      <div className={styles.backToHome}>
+      <div className="mt-3 mt-md-5">
         <Link href="/">
           <a>← Inicio</a>
         </Link>

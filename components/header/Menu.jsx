@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
-
+import Link from "next/link"
 
 const SubmenuLvl1 = ({ children }) => {
   if (!children) return null
@@ -22,19 +22,21 @@ const SubmenuLvl2 = ({ item, children }) => {
   }
   return (
     <>
-      <a className="dropdown-item padre py-2 pe-2" href={item.permalink}>
-        <span className="d-flex align-items-center justify-content-lg-between">
-          <span
-            className="content"
-            aria-label={item.Aria_label || item.Titulo_normal}
-          >{item.Titulo_normal}</span>
-          <span className="flecha d-none d-lg-inline mx-1">&raquo;</span>
-          <button
-            className="btn btn-secondary ms-3 d-lg-none"
-            onClick={toggleMenu}
-          >→</button>
-        </span>
-      </a>
+      <Link href={item.permalink}>
+        <a className="dropdown-item padre py-2 pe-2">
+          <span className="d-flex align-items-center justify-content-lg-between">
+            <span
+              className="content"
+              aria-label={item.Aria_label || item.Titulo_normal}
+            >{item.Titulo_normal}</span>
+            <span className="flecha d-none d-lg-inline mx-1">&raquo;</span>
+            <button
+              className="btn btn-secondary ms-3 d-lg-none"
+              onClick={toggleMenu}
+            >→</button>
+          </span>
+        </a>
+      </Link>
       <ul className={className}>{children}</ul>
     </>
   )
@@ -63,13 +65,14 @@ const renderMenuItem = ({item, depth, parentUrl}) => {
     if (!submenuItems) {
       return (
         <li key={item.Titulo_normal}>
-          <a
-            className="dropdown-item py-2"
-            href={item.permalink}
-            aria-label={item.Aria_label || item.Titulo_normal}
-          >
-            {item.Titulo_normal}
-          </a>
+          <Link href={item.permalink}>
+            <a
+              className="dropdown-item py-2"
+              aria-label={item.Aria_label || item.Titulo_normal}
+            >
+              {item.Titulo_normal}
+            </a>
+          </Link>
         </li>
       )
     }
@@ -88,7 +91,6 @@ const renderMenuItem = ({item, depth, parentUrl}) => {
   }
   const aProps = {
     className: "nav-link".concat(submenuItems ? " dropdown-toggle" : ""),
-    href: item.permalink,
     "aria-label": item.Aria_label || item.Titulo_normal
   }
   if (submenuItems) {
@@ -96,23 +98,36 @@ const renderMenuItem = ({item, depth, parentUrl}) => {
   }
   return (
     <li className={liClass} key={item.Titulo_normal}>
-      <a {...aProps}>
-        {item.Titulo_normal.toUpperCase()}
-      </a>
+      <Link href={item.permalink}>
+        <a {...aProps}>
+          {item.Titulo_normal.toUpperCase()}
+        </a>
+      </Link>
       <SubmenuLvl1>{submenuItems}</SubmenuLvl1>
     </li>
   )
 }
 
 const Menu = ({ navItems }) => {
-  const items = navItems.map(item => renderMenuItem({
+  // Items provenientes de Strapi
+  const dynamicItems = navItems.map(item => renderMenuItem({
     item,
     depth: 1,
     parentUrl: ""
   }))
+  const staticCuenta = (
+    <li className="nav-item">
+      <Link href="/cuenta">
+        <a className="nav-link">
+          Mi cuenta
+        </a>
+      </Link>
+    </li>
+  )
   return (
     <ul className="navbar-nav">
-      {items}
+      {dynamicItems}
+      {staticCuenta}
     </ul>
   )
 }

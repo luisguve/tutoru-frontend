@@ -114,7 +114,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
           </>
         : // Estamos en la pagina del ejercicio (single page)
           <>
-            <h2 className="text-center">{titulo}</h2>
+            <h2 className="text-center mb-3">{titulo}</h2>
             <div className={utilStyles.ejercicioContent} dangerouslySetInnerHTML={{ __html: descripcion}}></div>
           </>
       }
@@ -151,11 +151,11 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
               :
                 // Estamos en la propia pagina del ejercicio
                 loadingSolucion ?
-                  <h3 className="text-center">Cargando solucion...</h3>
+                  <h3 className="text-center my-5">Cargando solucion...</h3>
                 :
                   data &&
                   <>
-                    <h3 id="solucion" className="text-center">Solucion</h3>
+                    <h3 id="solucion" className="text-center mt-5 mb-3">Solucion</h3>
                     <div dangerouslySetInnerHTML={{ __html: data.solucion}}></div>
                   </>
             :

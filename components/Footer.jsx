@@ -17,11 +17,11 @@ const Footer = () => {
   }
 
   return (
-    <footer>
+    <footer className="py-3">
       {user ?
-        (<h4 className="user-info">
+        (<h6 className="user-info">
           <Link href="/cuenta"><a>Iniciaste como {user.email}</a></Link>
-        </h4>)
+        </h6>)
         :
         (
           <>

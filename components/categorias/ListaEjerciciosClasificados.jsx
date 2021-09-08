@@ -1,4 +1,4 @@
-import ListaEjercicio from "./ListaEjercicio"
+import ListaEjercicios from "./ListaEjercicios"
 
 /**
 * Este componente muestra los ejercicios que recibe como muestras.
@@ -25,13 +25,14 @@ const ListaEjerciciosClasificados = ({ muestras, irSolucion }) => {
   const ejerciciosClasificados = []
 
   for (const categoria in clasificados) {
-    const grupo = <ListaEjercicio
+    const grupo = <ListaEjercicios
       muestras={clasificados[categoria]}
       irSolucion={irSolucion}
     />
+    // console.log(categoria)
     const contenedorGrupo = (
       <div className="mt-2" key={categoria}>
-        <h3 className="text-center">{categoria}: {grupo.length} ejercicios</h3>
+        <h3 className="text-center">{categoria}: {clasificados[categoria].length} ejercicios</h3>
         {grupo}
       </div>
     )

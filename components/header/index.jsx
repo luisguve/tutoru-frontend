@@ -5,14 +5,14 @@ import styles from "../../styles/Header.module.scss"
 import Menu from "./Menu"
 
 export default function Header(props) {
-  const { isHome, navItems, titulo, subtitulo } = props
+  const { isHome, navItems, titulo, subtitulo, header } = props
   return (
     <>
       <header className={styles.Header}>
         {isHome ? (
           <HeaderInicio titulo={titulo} subtitulo={subtitulo} />
         ) : (
-          <HeaderPagina titulo={titulo} />
+          <HeaderPagina titulo={header} />
         )}
       </header>
       <Navbar navItems={navItems} titulo={titulo} />

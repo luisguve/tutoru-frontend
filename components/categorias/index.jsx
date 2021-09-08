@@ -35,7 +35,7 @@ export default function Categoria({props}) {
   />
 
   return (
-    <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb} titulo={titulo}>
+    <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb} titulo={titulo} header={indice.Titulo_normal}>
       <Head>
         <title>{titulo} | {metaSubtitulo}</title>
       </Head>
