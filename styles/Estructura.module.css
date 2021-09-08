@@ -5,6 +5,10 @@
     margin: 3rem auto 6rem;
   }
 }
+.container {
+  margin-top: 4rem;
+  margin-bottom: 6rem;
+}
 
 .header {
   display: flex;

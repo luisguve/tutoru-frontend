@@ -24,6 +24,7 @@ export default function Carrito() {
   } = useContext(CarritoContext)
   const cerrarCarrito = () => {
     setPaso1(false)
+    setPaso2(false)
     setClass(styles.Contenedor__Carrito)
   }
   const irPaso1 = () => {
@@ -59,6 +60,10 @@ export default function Carrito() {
     <>
       <div className={classContenedorCarrito}>
         <div className={styles.Contenedor__Ventana}>
+          <button
+            className={styles.closeBtn.concat(" btn btn-secondary px-2 py-0")}
+            onClick={cerrarCarrito}
+          >X</button>
           {/* Ventana de confirmacion: */}
           {/* En esta ventana se pueden quitar los articulos */}
           <Confirmacion
@@ -102,13 +107,15 @@ const Confirmacion = props => {
             <>
               {lista}
               <h4 className="text-center">Total a pagar: ${informacion.total}</h4>
-              <button onClick={() => limpiar()}>Limpiar carrito</button>
-              <button onClick={siguiente}>Siguiente</button>
+              <div className="d-flex flex-column w-75 mt-2">
+                <button onClick={() => limpiar()}>Limpiar carrito</button>
+                <button className="my-2" onClick={siguiente}>Siguiente</button>
+              </div>
             </>
             :
             <p className="text-center">Los ejercicios que agregues aparecerán aqui</p>
       }
-      <button onClick={volver}>Volver</button>
+      <button className="w-75 mb-2" onClick={volver}>Volver</button>
     </div>
   )
 }
@@ -185,15 +192,15 @@ const Checkout = props => {
           </label>
           {
             loadingToken ?
-              <button>Cargando...</button>
+              <button className="w-75 my-2">Cargando...</button>
             :
-              <button onClick={pagar}>Completar compra</button>
+              <button className="w-75 my-2" onClick={pagar}>Completar compra</button>
           }
         </>
         :
         <p>Los ejercicios que agregues aparecerán aqui</p>
       }
-      <button onClick={volver}>Volver</button>
+      <button className="w-75" onClick={volver}>Volver</button>
     </div>
   )
 }

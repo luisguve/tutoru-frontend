@@ -19,15 +19,13 @@
 }
 .Contenedor__Carrito.abierto {
   display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .Contenedor__Ventana {
-  position: fixed;
-  top: 43%;
-  left: 10%;
-  @media screen and (min-width: 768px) {
-    left: 50%;
-  }
+  position: relative;
 }
 
 .Ventana[data-ocultar="true"] {
@@ -38,15 +36,24 @@
 }
 
 .Ventana {
-  position: relative;
+  width: 95vw;
   background: rgba(256,256,256,0.9);
   border: 1px dotted blue;
-  padding: 20px;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  left: -5.5%;
   @media screen and (min-width: 768px) {
-    left: -50%;
+    padding: 3rem;
+    width: 60vw;
   }
+  @media screen and (min-width: 992px) {
+    width: 40vw;
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
