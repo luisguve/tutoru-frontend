@@ -34,10 +34,11 @@ export const AuthProvider = props => {
   const logoutUser = async () => {
     try {
       await magic.user.logout()
-      setUser(null)
-      limpiarSesion()
       limpiarToken()
+      limpiarSesion()
       addToast("Cerraste sesion", { appearance: 'info' })
+      setToken(null)
+      setUser(null)
       router.push("/")
     } catch (err) {}
   }
