@@ -5,7 +5,7 @@ import { useToasts } from "react-toast-notifications"
 
 import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
-import SeccionEjercicios from "../components/SeccionEjercicios"
+import EstructuraPagina from "../components/EstructuraPagina"
 
 import { cargarNavItems } from "../lib/metadata"
 
@@ -70,7 +70,7 @@ export default function Pago({navItems}) {
   const { order, loadingOrder } = useOrder(confirmante)
 
   return (
-    <EstructuraPagina navItems={navItems}>
+    <EstructuraPagina header="Confirmación de pago" navItems={navItems}>
       <div>
         <Head>
           <title>Confirmación de compra</title>

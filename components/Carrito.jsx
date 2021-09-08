@@ -10,7 +10,7 @@ import styles from "../styles/Carrito.module.scss"
 import { STRIPE_PK, STRAPI } from "../lib/urls"
 import BotonCarrito from "./BotonCarrito"
 
-// const stripePromise = loadStripe(STRIPE_PK)
+const stripePromise = loadStripe(STRIPE_PK)
 
 export default function Carrito() {
   const {
@@ -108,14 +108,20 @@ const Confirmacion = props => {
               {lista}
               <h4 className="text-center">Total a pagar: ${informacion.total}</h4>
               <div className="d-flex flex-column w-75 mt-2">
-                <button onClick={() => limpiar()}>Limpiar carrito</button>
-                <button className="my-2" onClick={siguiente}>Siguiente</button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => limpiar()}
+                >Limpiar carrito</button>
+                <button
+                  className="btn btn-primary my-2"
+                  onClick={siguiente}
+                >Siguiente</button>
               </div>
             </>
             :
             <p className="text-center">Los ejercicios que agregues aparecerán aqui</p>
       }
-      <button className="w-75 mb-2" onClick={volver}>Volver</button>
+      <button className="btn btn-secondary w-75 mb-2" onClick={volver}>Volver</button>
     </div>
   )
 }
@@ -133,11 +139,14 @@ const Checkout = props => {
   const [checkedCC, setCheckedCC] = useState(true)
   const [metodo, setMetodo] = useState("CC")
 
+  const [disabled, setDisabled] = useState("")
+
   const pagar = async () => {
     if (!token) {
       loadToken()
       return
     }
+    setDisabled("disabled")
     try {
       const stripe = await stripePromise
 
@@ -170,6 +179,8 @@ const Checkout = props => {
     } catch (err) {
       console.log(err)
       addToast("Algo salio mal. Ver consola", { appearance: "error" })
+    } finally {
+      setDisabled("")
     }
   }
   return (
@@ -192,15 +203,18 @@ const Checkout = props => {
           </label>
           {
             loadingToken ?
-              <button className="w-75 my-2">Cargando...</button>
+              <p className="text-center">Cargando...</p>
             :
-              <button className="w-75 my-2" onClick={pagar}>Completar compra</button>
+              <button
+                className={disabled.concat("btn btn-primary w-75 my-2")}
+                onClick={pagar}
+              >Completar compra</button>
           }
         </>
         :
         <p>Los ejercicios que agregues aparecerán aqui</p>
       }
-      <button className="w-75" onClick={volver}>Volver</button>
+      <button className="btn btn-secondary w-75" onClick={volver}>Volver</button>
     </div>
   )
 }
