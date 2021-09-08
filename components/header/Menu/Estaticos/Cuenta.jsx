@@ -2,10 +2,9 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
-import BotonCarrito from "../../BotonCarrito";
-import profilePic from "../../../public/profilepic2.png"
+import profilePic from "../../../../public/profilepic2.png"
 
-const CuentaMovil = () => (
+export const CuentaMovil = () => (
   <li className="nav-item d-lg-none">
     <Link href="/cuenta">
       <a className="nav-link">
@@ -14,7 +13,8 @@ const CuentaMovil = () => (
     </Link>
   </li>
 )
-const CuentaDesktop = () => {
+
+export const CuentaDesktop = () => {
   const [ariaExpanded, setAriaExpanded] = useState(false)
   const [showClass, setShowClass] = useState("")
   const showMenu = (e) => {
@@ -51,20 +51,3 @@ const CuentaDesktop = () => {
     </li>
   )
 }
-const BotonVerCarrito = () => (
-  <li className="nav-item d-md-none">
-    <BotonCarrito />
-  </li>
-)
-
-const Estaticos = () => {
-  return (
-    <>
-      <CuentaMovil />
-      <CuentaDesktop />
-      <BotonVerCarrito />
-    </>
-  )
-}
-
-export default Estaticos
