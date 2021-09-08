@@ -3,6 +3,13 @@
   right: 10px;
   top: 50%;
   z-index: 1021;
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .Icono {
+    display: inline-block;
+  }
 }
 
 .Contenedor__Carrito {
