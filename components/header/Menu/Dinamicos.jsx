@@ -1,10 +1,6 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Image from "next/image"
-
-import BotonCarrito from "../BotonCarrito";
-import profilePic from "./profilepic2.png"
 
 const SubmenuLvl1 = ({ children }) => {
   if (!children) return null
@@ -112,41 +108,14 @@ const renderMenuItem = ({item, depth, parentUrl}) => {
   )
 }
 
-const Menu = ({ navItems }) => {
-  // Items provenientes de Strapi
-  const dynamicItems = navItems.map(item => renderMenuItem({
+// Items provenientes de Strapi
+const Dinamicos = props => {
+  const { navItems } = props
+  return navItems.map(item => renderMenuItem({
     item,
     depth: 1,
     parentUrl: ""
   }))
-  const staticCuentaMovil = (
-    <li className="nav-item d-lg-none">
-      <Link href="/cuenta">
-        <a className="nav-link">
-          Mi cuenta
-        </a>
-      </Link>
-    </li>
-  )
-  const staticCuentaDesktop = (
-    <li className="nav-item">
-      <Image alt="perfil" width="40" height="40" src={profilePic} />
-    </li>
-  )
-  const botonCarrito = (
-    <li className="nav-item d-md-none">
-      <BotonCarrito />
-    </li>
-  )
-  return (
-    <ul className="navbar-nav">
-      {dynamicItems}
-      {staticCuentaMovil}
-      {staticCuentaDesktop}
-      {botonCarrito}
-    </ul>
-  )
 }
 
-export default Menu
-
+export default Dinamicos
