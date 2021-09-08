@@ -124,7 +124,7 @@ export const AuthProvider = props => {
 
   useEffect(() => {
     magic = new Magic(MAGIC_PUBLIC_KEY)
-    // checkIsLoggedIn()
+    checkIsLoggedIn()
   }, [])
 
   return (
