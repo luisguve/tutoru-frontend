@@ -50,7 +50,7 @@ export default function Carrito() {
     return informacion.articulos.map(articulo => {
       return (
         <div key={articulo.slug}>
-          <h5>{articulo.precio} | {articulo.titulo} {botonQuitar(articulo)} </h5>
+          <h6>{articulo.precio} | {articulo.titulo} {botonQuitar(articulo)} </h6>
         </div>
       )
     })
