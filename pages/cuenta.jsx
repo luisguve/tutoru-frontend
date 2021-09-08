@@ -78,6 +78,17 @@ const useHistorialCompras = token => {
   }
 }
 
+const breadCrumb = [
+  {
+    name: "inicio",
+    url: "/"
+  },
+  {
+    name: "Mi Cuenta",
+    url: "/cuenta"
+  }
+]
+
 export default function Cuenta({ navItems, informacionSitio }) {
   const { user, loadingUser, token, logoutUser } = useContext(AuthContext)
 
@@ -90,14 +101,24 @@ export default function Cuenta({ navItems, informacionSitio }) {
 
   if (!user && !loadingUser) {
     return (
-      <EstructuraPagina navItems={navItems} titulo={Titulo_sitio} header="Cuenta">
+      <EstructuraPagina
+        navItems={navItems}
+        titulo={Titulo_sitio}
+        header="Mi Cuenta"
+        breadCrumb={breadCrumb}
+      >
       <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
       <h2 className="text-center">Inicia sesión para ver tu cuenta</h2>
       </EstructuraPagina>
     )
   }
   return (
-    <EstructuraPagina navItems={navItems} titulo={Titulo_sitio} header="Cuenta">
+    <EstructuraPagina
+      navItems={navItems}
+      titulo={Titulo_sitio}
+      header="Mi Cuenta"
+      breadCrumb={breadCrumb}
+    >
       <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
       <div>
         {
@@ -108,7 +129,10 @@ export default function Cuenta({ navItems, informacionSitio }) {
           :
           <>
             <div className="d-flex justify-content-end">
-              <button onClick={() => logoutUser()}>salir</button>
+              <button
+                className="btn btn-secondary px-2 py-0"
+                onClick={() => logoutUser()}
+              >salir</button>
             </div>
             <h5 className="text-center">
               Iniciaste sesión como {user.email}
