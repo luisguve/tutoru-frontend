@@ -6,6 +6,7 @@ body {
     Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.6;
   font-size: 18px;
+  min-height: 100vh;
 }
 
 * {
@@ -27,6 +28,11 @@ img {
 
 footer {
   text-align: center;
+  background-color: #1b245d;
+  color: white;
+  a {
+    color: #5599ff;
+  }
 }
 
 .dropdown-menu > li a.padre:hover {
@@ -79,3 +85,8 @@ footer {
   }
 }
 /* ============ small devices end ============ */
+
+// Muestra las notificaciones encima del navbar
+.react-toast-notifications__container {
+  z-index: 1021!important;
+}
