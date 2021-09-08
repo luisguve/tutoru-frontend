@@ -1,8 +1,10 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import Image from "next/image"
 
 import BotonCarrito from "../BotonCarrito";
+import profilePic from "./profilepic2.png"
 
 const SubmenuLvl1 = ({ children }) => {
   if (!children) return null
@@ -117,13 +119,18 @@ const Menu = ({ navItems }) => {
     depth: 1,
     parentUrl: ""
   }))
-  const staticCuenta = (
-    <li className="nav-item">
+  const staticCuentaMovil = (
+    <li className="nav-item d-lg-none">
       <Link href="/cuenta">
         <a className="nav-link">
           Mi cuenta
         </a>
       </Link>
+    </li>
+  )
+  const staticCuentaDesktop = (
+    <li className="nav-item">
+      <Image alt="perfil" width="40" height="40" src={profilePic} />
     </li>
   )
   const botonCarrito = (
@@ -134,7 +141,8 @@ const Menu = ({ navItems }) => {
   return (
     <ul className="navbar-nav">
       {dynamicItems}
-      {staticCuenta}
+      {staticCuentaMovil}
+      {staticCuentaDesktop}
       {botonCarrito}
     </ul>
   )
