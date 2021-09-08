@@ -47,7 +47,10 @@ export default function Home(props) {
             </a>
           </Link>
         </div>
-        <ListaEjercicios irSolucion={false} muestras={ejercicios.planteamientos} />
+        {
+          (ejercicios.planteamientos.length > 0) && 
+          <ListaEjercicios irSolucion={false} muestras={ejercicios.planteamientos} />
+        }
       </li>
     )
   })
