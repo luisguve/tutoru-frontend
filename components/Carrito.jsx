@@ -4,35 +4,23 @@ import { loadStripe } from "@stripe/stripe-js"
 
 import AuthContext from "../context/AuthContext"
 import CarritoContext from "../context/CarritoContext"
+import { useInformacion } from "../hooks/carrito"
 import { limpiarSesion as limparEjerciciosComprados } from "../context/EjerciciosContext"
 import styles from "../styles/Carrito.module.css"
 import { STRIPE_PK, STRAPI } from "../lib/urls"
 
 // const stripePromise = loadStripe(STRIPE_PK)
 
-// Este hook retorna los articulos en el carrito como una lista, junto con
-// el precio total a pagar
-const useInformacion = () => {
-  const { articulos } = useContext(CarritoContext)
-  const [informacion, setInformacion] = useState(null)
-  useEffect(() => {
-    const total = articulos.reduce((suma, articulo) => suma + articulo.precio, 0)
-    setInformacion({
-      articulos,
-      total
-    })
-  }, [articulos])
-
-  return {
-    informacion
-  }
-}
-
 export default function Carrito() {
-  const [paso1, setPaso1] = useState(false)
-  const [paso2, setPaso2] = useState(false)
-  const [classContenedorCarrito, setClass] = useState(styles.Contenedor__Carrito)
-
+  const {
+    quitar,
+    paso1,
+    setPaso1,
+    paso2,
+    setPaso2,
+    classContenedorCarrito,
+    setClass,
+  } = useContext(CarritoContext)
   const cerrarCarrito = () => {
     setPaso1(false)
     setClass(styles.Contenedor__Carrito)
@@ -47,9 +35,7 @@ export default function Carrito() {
     setPaso2(true)
     setPaso1(false)
   }
-
   const { informacion } = useInformacion()
-  const { quitar } = useContext(CarritoContext)
 
   const mostrarArticulos = editable => {
     if (!informacion) {
@@ -91,11 +77,6 @@ export default function Carrito() {
           />
         </div>
       </div>
-      <button className={styles.Icono} onClick={irPaso1}>
-        Ver carrito {
-          (informacion && informacion.articulos.length) ? `(${informacion.articulos.length})`: null
-        }
-      </button>
     </>
   )
 }

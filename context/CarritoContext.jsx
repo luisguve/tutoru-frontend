@@ -3,6 +3,8 @@ import { createContext, useEffect, useContext, useState } from "react"
 import AuthContext from "./AuthContext"
 import EjerciciosContext from "./EjerciciosContext"
 
+import styles from "../styles/Carrito.module.css"
+
 const CarritoContext = createContext()
 
 export const CarritoProvider = props => {
@@ -10,6 +12,10 @@ export const CarritoProvider = props => {
   const { IDsEjercicios: comprados } = useContext(EjerciciosContext)
   const [articulos, setArticulos] = useState([])
   const [articulosIDs, setArticulosIDs] = useState([])
+
+  const [paso1, setPaso1] = useState(false)
+  const [paso2, setPaso2] = useState(false)
+  const [classContenedorCarrito, setClass] = useState(styles.Contenedor__Carrito)
 
   const agregar = articulo => {
     for (let i = articulosIDs.length - 1; i >= 0; i--) {
@@ -65,7 +71,21 @@ export const CarritoProvider = props => {
   }, [comprados])
 
   return (
-    <CarritoContext.Provider value={{articulos, articulosIDs, agregar, quitar, limpiar}}>
+    <CarritoContext.Provider
+      value={{
+        articulos,
+        articulosIDs,
+        agregar,
+        quitar,
+        limpiar,
+        paso1,
+        paso2,
+        setPaso1,
+        setPaso2,
+        classContenedorCarrito,
+        setClass,
+      }}
+    >
       {props.children}
     </CarritoContext.Provider>
   )
