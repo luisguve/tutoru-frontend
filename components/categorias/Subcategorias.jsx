@@ -15,7 +15,7 @@ export default function subcategorias({parentUrl, subcategorias}) {
       }
 
       return (<div key={s.Titulo_url}>
-        <h4>
+        <h5>
           <Link href={`${parentUrl}/${s.Titulo_url}`}>
             <a className="ms-1">{s.Aria_label || s.Titulo_normal} {
               !subcategorias && `(${s.ejercicios.length})`
@@ -27,7 +27,7 @@ export default function subcategorias({parentUrl, subcategorias}) {
                {subcategorias}
             </div>
           }
-        </h4>
+        </h5>
       </div>)
     })
   }
