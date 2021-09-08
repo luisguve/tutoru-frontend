@@ -4,21 +4,23 @@ import Head from "next/head"
 
 import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
-import SeccionEjercicios, { siteTitle } from "../components/SeccionEjercicios"
+import EstructuraPagina from "../components/EstructuraPagina"
 import ListaEjerciciosClasificados from "../components/categorias/ListaEjerciciosClasificados"
 
-import { cargarNavItems } from "../lib/metadata"
+import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
 
 export async function getStaticProps() {
   const navItems = await cargarNavItems()
+  const informacionSitio = await cargarInformacionSitio()
   return {
     props: {
-      navItems
+      navItems,
+      informacionSitio,
     }
   }
 }
 
-/*
+/**
 * Este Hook pide a Strapi los ejercicios que ha adquirido el usuario
 * y sus ordenes de compra, ambas de manera asincrona e independiente.
 */
@@ -76,7 +78,7 @@ const useHistorialCompras = token => {
   }
 }
 
-export default function Cuenta({ navItems }) {
+export default function Cuenta({ navItems, informacionSitio }) {
   const { user, loadingUser, token, logoutUser } = useContext(AuthContext)
 
   const {
@@ -84,71 +86,81 @@ export default function Cuenta({ navItems }) {
     ejercicios, loadingEjercicios
   } = useHistorialCompras(token)
 
+  const { Titulo_sitio } = informacionSitio
+
   if (!user && !loadingUser) {
     return (
-      <EstructuraPagina navItems={navItems}>
-      <Head><title>{siteTitle} | Mi cuenta</title></Head>
-      <h2 style={{textAlign: "center"}}>Inicia sesión para ver tu cuenta</h2>
+      <EstructuraPagina navItems={navItems} titulo={Titulo_sitio}>
+      <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
+      <h2 className="text-center">Inicia sesión para ver tu cuenta</h2>
       </EstructuraPagina>
     )
   }
   return (
-    <EstructuraPagina navItems={navItems}>
-      <Head><title>{siteTitle} | Mi cuenta</title></Head>
+    <EstructuraPagina navItems={navItems} titulo={Titulo_sitio}>
+      <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
       <div>
         {
           loadingUser ?
-          <h3 style={{textAlign: "center"}}>
+          <h4 className="text-center">
             Cargando usuario...
-          </h3>
+          </h4>
           :
-          <h2 style={{textAlign: "center"}}>
+          <h4 className="text-center">
             Iniciaste sesión como {user.email}
-          </h2>
+          </h4>
         }
         {
           loadingEjercicios ?
-          <h3 style={{textAlign: "center"}}>
+          <h4 className="text-center">
             Cargando tus ejercicios...
-          </h3>
+          </h4>
           :
           (!ejercicios || !ejercicios.length) ?
-            <h3 style={{textAlign: "center"}}>
+            <h4 className="text-center">
               Los ejercicios que compres aparecerán aquí
-            </h3>
+            </h4>
           :
-            <div>
-              <h2 style={{textAlign: "center"}}>Tus ejercicios</h2>
+            <div className="my-5">
+              <h2 className="text-center">Tus ejercicios</h2>
               <ListaEjerciciosClasificados irSolucion={true} muestras={ejercicios} />
             </div>
         }
         {
           loadingOrders ?
-          <h3 style={{textAlign: "center"}}>
+          <h4 className="text-center">
             Cargando tus ordenes de compra...
-          </h3>
+          </h4>
           :
           (!orders || !orders.length) ?
-            <h3 style={{textAlign: "center"}}>
+            <h4 className="text-center">
               Tus órdenes de compra aparecerán aquí
-            </h3>
+            </h4>
           :
-            <div>
-              <h2 style={{textAlign: "center"}}>Tu historial de compras</h2>
-              <ul>
+            <div className="my-5">
+              <h2 className="text-center">Tu historial de compras</h2>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
                 {
                   orders.map(o => (
-                    <li key={o.id}>
-                      <div>
-                        <span>Total: {o.total}</span> - 
-                        <span>Fecha: {o.updated_at}</span> - 
-                        <span>Estado: {o.estado}</span> - 
-                        <span>ID: {o.id}</span>
-                      </div>
-                    </li>
+                    <tr key={o.id}>
+                      <th scope="row">{o.id}</th>
+                      <td>${o.total}</td>
+                      <td>{(new Date(o.updated_at)).toLocaleDateString()}</td>
+                      <td>{o.estado}</td>
+                    </tr>
                   )
                 )}
-              </ul>
+                </tbody>
+              </table>
             </div>
         }
         <button onClick={() => logoutUser()}>logout</button>
