@@ -60,7 +60,7 @@ export function EjerciciosProvider({children}) {
       }
     }
     if (!idsRecuperados && token) {
-      // getEjercicios(token)
+      getEjercicios(token)
     }
   }, [user, token])
   return (
