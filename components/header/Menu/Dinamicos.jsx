@@ -2,10 +2,10 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 
-const SubmenuLvl1 = ({ children }) => {
+const SubmenuLvl1 = ({ children, showClass }) => {
   if (!children) return null
   return (
-    <ul className="dropdown-menu py-1">{children}</ul>
+    <ul className={showClass.concat(" dropdown-menu py-1")}>{children}</ul>
   )
 }
 
@@ -89,21 +89,40 @@ const renderMenuItem = ({item, depth, parentUrl}) => {
   if (submenuItems) {
     liClass += " dropdown"
   }
-  const aProps = {
-    className: "nav-link".concat(submenuItems ? " dropdown-toggle" : ""),
-    "aria-label": item.Aria_label || item.Titulo_normal
+  const [ariaExpanded, setAriaExpanded] = useState(false)
+  const [showClass, setShowClass] = useState("")
+  const showMenu = (e) => {
+    if (!submenuItems) {
+      return
+    }
+    setAriaExpanded(true)
+    setShowClass("show")
   }
-  if (submenuItems) {
-    aProps["data-bs-toggle"] = "dropdown"
+  const hideMenu = (e) => {
+    if (!submenuItems) {
+      return
+    }
+    setAriaExpanded(false)
+    setShowClass("")
   }
   return (
-    <li className={liClass} key={item.Titulo_normal}>
+    <li
+      className={liClass}
+      key={item.Titulo_normal}
+      onMouseEnter={showMenu}
+      onMouseLeave={hideMenu}
+    >
       <Link href={item.permalink}>
-        <a {...aProps}>
+        <a
+          data-bs-toggle="dropdown"
+          className={showClass.concat(" nav-link").concat(submenuItems ? " dropdown-toggle" : "")}
+          aria-label={item.Aria_label || item.Titulo_normal}
+          aria-expanded={ariaExpanded}
+        >
           {item.Titulo_normal.toUpperCase()}
         </a>
       </Link>
-      <SubmenuLvl1>{submenuItems}</SubmenuLvl1>
+      <SubmenuLvl1 showClass={showClass}>{submenuItems}</SubmenuLvl1>
     </li>
   )
 }
