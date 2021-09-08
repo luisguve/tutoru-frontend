@@ -1,7 +1,7 @@
 import { useContext } from "react"
 
 import CarritoContext from "../context/CarritoContext"
-import styles from "../styles/Carrito.module.css"
+import styles from "../styles/Carrito.module.scss"
 import { useInformacion } from "../hooks/carrito"
 
 export default function Carrito() {
@@ -9,7 +9,6 @@ export default function Carrito() {
   const { setPaso1, setPaso2, setClass } = useContext(CarritoContext)
   const irPaso1 = () => {
     setPaso1(true)
-    setPaso2(false)
     const className = `${styles.Contenedor__Carrito} ${styles.abierto}`
     setClass(className)
   }

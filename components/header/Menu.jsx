@@ -2,6 +2,8 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 
+import BotonCarrito from "../BotonCarrito";
+
 const SubmenuLvl1 = ({ children }) => {
   if (!children) return null
   return (
@@ -31,9 +33,9 @@ const SubmenuLvl2 = ({ item, children }) => {
             >{item.Titulo_normal}</span>
             <span className="flecha d-none d-lg-inline mx-1">&raquo;</span>
             <button
-              className="btn btn-secondary ms-3 d-lg-none"
+              className="btn btn-secondary ms-3 d-lg-none px-2 py-0"
               onClick={toggleMenu}
-            >→</button>
+            >...</button>
           </span>
         </a>
       </Link>
@@ -124,10 +126,16 @@ const Menu = ({ navItems }) => {
       </Link>
     </li>
   )
+  const botonCarrito = (
+    <li className="nav-item d-md-none">
+      <BotonCarrito />
+    </li>
+  )
   return (
     <ul className="navbar-nav">
       {dynamicItems}
       {staticCuenta}
+      {botonCarrito}
     </ul>
   )
 }

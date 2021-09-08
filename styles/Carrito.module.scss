@@ -1,14 +1,9 @@
-.Icono {
-  position: fixed;
-  right: 10px;
-  top: 50%;
-  z-index: 1021;
-  display: none;
-}
-
 @media screen and (min-width: 768px) {
   .Icono {
-    display: inline-block;
+    z-index: 1021;
+    position: fixed;
+    right: 10px;
+    top: 50%;
   }
 }
 
@@ -28,8 +23,11 @@
 
 .Contenedor__Ventana {
   position: fixed;
-  left: 50%;
   top: 43%;
+  left: 10%;
+  @media screen and (min-width: 768px) {
+    left: 50%;
+  }
 }
 
 .Ventana[data-ocultar="true"] {
@@ -41,11 +39,14 @@
 
 .Ventana {
   position: relative;
-  left: -50%;
   background: rgba(256,256,256,0.9);
   border: 1px dotted blue;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  left: -5.5%;
+  @media screen and (min-width: 768px) {
+    left: -50%;
+  }
 }

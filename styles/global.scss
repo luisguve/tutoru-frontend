@@ -90,3 +90,18 @@ footer {
 .react-toast-notifications__container {
   z-index: 1021!important;
 }
+
+@media screen and (max-width: 767px) {
+  .navbar-nav {
+    .dropdown-item {
+      white-space: pre-wrap;      /* Webkit */    
+      white-space: -moz-pre-wrap; /* Firefox */     
+      white-space: -pre-wrap;     /* Opera <7 */    
+      white-space: -o-pre-wrap;   /* Opera 7 */     
+      word-wrap: break-word;      /* IE */ 
+      .content {
+        width: 80%;
+      }
+    }
+  }
+}

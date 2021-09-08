@@ -90,14 +90,14 @@ export default function Cuenta({ navItems, informacionSitio }) {
 
   if (!user && !loadingUser) {
     return (
-      <EstructuraPagina navItems={navItems} titulo={Titulo_sitio}>
+      <EstructuraPagina navItems={navItems} titulo={Titulo_sitio} header="Cuenta">
       <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
       <h2 className="text-center">Inicia sesión para ver tu cuenta</h2>
       </EstructuraPagina>
     )
   }
   return (
-    <EstructuraPagina navItems={navItems} titulo={Titulo_sitio}>
+    <EstructuraPagina navItems={navItems} titulo={Titulo_sitio} header="Cuenta">
       <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
       <div>
         {
@@ -106,9 +106,14 @@ export default function Cuenta({ navItems, informacionSitio }) {
             Cargando usuario...
           </h4>
           :
-          <h4 className="text-center">
-            Iniciaste sesión como {user.email}
-          </h4>
+          <>
+            <div className="d-flex justify-content-end">
+              <button onClick={() => logoutUser()}>salir</button>
+            </div>
+            <h5 className="text-center">
+              Iniciaste sesión como {user.email}
+            </h5>
+          </>
         }
         {
           loadingEjercicios ?
@@ -122,7 +127,7 @@ export default function Cuenta({ navItems, informacionSitio }) {
             </h4>
           :
             <div className="my-5">
-              <h2 className="text-center">Tus ejercicios</h2>
+              <h2 className="text-center mb-3">Tus ejercicios</h2>
               <ListaEjerciciosClasificados irSolucion={true} muestras={ejercicios} />
             </div>
         }
@@ -163,7 +168,6 @@ export default function Cuenta({ navItems, informacionSitio }) {
               </table>
             </div>
         }
-        <button onClick={() => logoutUser()}>logout</button>
       </div>
     </EstructuraPagina>
   )

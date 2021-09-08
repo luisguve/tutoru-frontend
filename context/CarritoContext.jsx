@@ -3,7 +3,7 @@ import { createContext, useEffect, useContext, useState } from "react"
 import AuthContext from "./AuthContext"
 import EjerciciosContext from "./EjerciciosContext"
 
-import styles from "../styles/Carrito.module.css"
+import styles from "../styles/Carrito.module.scss"
 
 const CarritoContext = createContext()
 

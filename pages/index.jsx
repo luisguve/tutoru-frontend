@@ -65,13 +65,13 @@ export default function Home(props) {
         <title>{informacionSitio.Titulo_sitio}</title>
       </Head>
       <section className="p-1">
-        <h2 className="text-center">
+        <h2 className="text-center mt-5 mb-2">
           {informacionSitio.Titulo_home}
         </h2>
         <p>
           {informacionSitio.Descripcion}
         </p>
-        <ul className={utilStyles.list}>
+        <ul className={utilStyles.list.concat(" my-5")}>
           {listaPortadas}
         </ul>
       </section>

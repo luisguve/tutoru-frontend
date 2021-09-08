@@ -6,8 +6,9 @@ import AuthContext from "../context/AuthContext"
 import CarritoContext from "../context/CarritoContext"
 import { useInformacion } from "../hooks/carrito"
 import { limpiarSesion as limparEjerciciosComprados } from "../context/EjerciciosContext"
-import styles from "../styles/Carrito.module.css"
+import styles from "../styles/Carrito.module.scss"
 import { STRIPE_PK, STRAPI } from "../lib/urls"
+import BotonCarrito from "./BotonCarrito"
 
 // const stripePromise = loadStripe(STRIPE_PK)
 
@@ -77,6 +78,7 @@ export default function Carrito() {
           />
         </div>
       </div>
+      <span className="d-none d-md-inline"><BotonCarrito /></span>
     </>
   )
 }
@@ -91,20 +93,20 @@ const Confirmacion = props => {
     <div className={styles.Ventana} data-ocultar={ocultar}>
       {
       (!user && !loadingUser) ?
-        <p>Inicia sesion para comprar ejercicios</p>
+        <p className="text-center">Inicia sesion para comprar ejercicios</p>
         :
         loadingUser ?
-          <p>Cargando usuario</p>
+          <p className="text-center">Cargando usuario</p>
           :
           informacion && informacion.articulos.length ?
             <>
               {lista}
-              <h4>Total a pagar: ${informacion.total}</h4>
+              <h4 className="text-center">Total a pagar: ${informacion.total}</h4>
               <button onClick={() => limpiar()}>Limpiar carrito</button>
               <button onClick={siguiente}>Siguiente</button>
             </>
             :
-            <p>Los ejercicios que agregues aparecerán aqui</p>
+            <p className="text-center">Los ejercicios que agregues aparecerán aqui</p>
       }
       <button onClick={volver}>Volver</button>
     </div>
