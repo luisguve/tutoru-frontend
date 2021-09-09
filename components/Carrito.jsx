@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState } from "react"
 import { useToasts } from "react-toast-notifications"
 import { loadStripe } from "@stripe/stripe-js"
 
@@ -50,7 +50,7 @@ export default function Carrito() {
     return informacion.articulos.map(articulo => {
       return (
         <div key={articulo.slug}>
-          <h6>{articulo.precio} | {articulo.titulo} {botonQuitar(articulo)} </h6>
+          <h6>${articulo.precio} | {articulo.titulo} {botonQuitar(articulo)} </h6>
         </div>
       )
     })
@@ -206,9 +206,9 @@ const Checkout = props => {
               <p className="text-center">Cargando...</p>
             :
               <button
-                className={disabled.concat("btn btn-primary w-75 my-2")}
+                className={disabled.concat(" btn btn-primary w-75 my-2")}
                 onClick={pagar}
-              >Completar compra</button>
+              >{disabled ? "Espera..." : "Completar compra"}</button>
           }
         </>
         :

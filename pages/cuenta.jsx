@@ -6,7 +6,7 @@ import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import EstructuraPagina from "../components/EstructuraPagina"
 import ListaEjerciciosClasificados from "../components/categorias/ListaEjerciciosClasificados"
-
+import { useHistorialCompras } from "../hooks/historial"
 import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
 
 export async function getStaticProps() {
@@ -17,64 +17,6 @@ export async function getStaticProps() {
       navItems,
       informacionSitio,
     }
-  }
-}
-
-/**
-* Este Hook pide a Strapi los ejercicios que ha adquirido el usuario
-* y sus ordenes de compra, ambas de manera asincrona e independiente.
-*/
-const useHistorialCompras = token => {
-  const [orders, setOrders] = useState(null)
-  const [loadingOrders, setLoadingOrders] = useState(false)
-
-  const [ejercicios, setEjercicios] = useState(null)
-  const [loadingEjercicios, setLoadingEjercicios] = useState(false)
-
-  useEffect(() => {
-    const fetchOrders = async token => {
-      try {
-        setLoadingOrders(true)
-        const ordersUrl = `${STRAPI}/orders`
-        const orders_res = await fetch(ordersUrl, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
-        const data = await orders_res.json()
-        setOrders(data)
-      } catch (err) {
-        console.log(err)
-        setOrders(null)
-      }
-      setLoadingOrders(false)
-    }
-    const fetchEjercicios = async token => {
-      try {
-        setLoadingEjercicios(true)
-        const ejerciciosUrl = `${STRAPI}/ejercicios/comprados`
-        const ejercicios_res = await fetch(ejerciciosUrl, {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          }
-        })
-        const data = await ejercicios_res.json()
-        setEjercicios(data)
-      } catch (err) {
-        console.log(err)
-        setEjercicios(null)
-      }
-      setLoadingEjercicios(false)
-    }
-    if (token) {
-      fetchEjercicios(token)
-      fetchOrders(token)
-    }
-  }, [token])
-
-  return {
-    orders, loadingOrders,
-    ejercicios, loadingEjercicios
   }
 }
 

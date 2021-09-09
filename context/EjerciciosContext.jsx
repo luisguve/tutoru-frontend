@@ -64,7 +64,7 @@ export function EjerciciosProvider({children}) {
     }
   }, [user, token])
   return (
-     <EjerciciosContext.Provider value={{ IDsEjercicios, loadingIDsEjercicios }}>
+     <EjerciciosContext.Provider value={{ IDsEjercicios, loadingIDsEjercicios, limpiar: limpiarSesion }}>
        {children}
      </EjerciciosContext.Provider>
   )

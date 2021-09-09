@@ -1,12 +1,11 @@
 import { useRouter } from "next/router"
 import Head from "next/head"
 import Link from "next/link"
-import { useContext, useState, useEffect } from "react"
-import { useToasts } from "react-toast-notifications"
+import { useContext } from "react"
 
-import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import EstructuraPagina from "../components/EstructuraPagina"
+import { useOrder } from "../hooks/order"
 
 import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
 
@@ -19,47 +18,6 @@ export async function getStaticProps() {
       informacionSitio
     }
   }
-}
-
-const useOrder = (confirmante) => {
-  const [order, setOrder] = useState(null)
-  const [loadingOrder, setLoading] = useState(false)
-  const { token } = useContext(AuthContext)
-
-  const { addToast } = useToasts()
-
-  useEffect(() => {
-    const fetchOrder = async () => {
-      if (token && confirmante) {
-        try {
-          setLoading(true)
-          addToast("Confirmando pago", {appearance: "info"})
-          const orderUrl = `${STRAPI}/orders/confirm`
-          const order_res = await fetch(orderUrl, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${token}`,
-              "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-              checkout_session: confirmante
-            })
-          })
-          const data = await order_res.json()
-          addToast("¡Pago confirmado!", {appearance: "success"})
-          setOrder(data)
-        } catch (err) {
-          console.log(err)
-          addToast("Error confirmando orden", {appearance: "error"})
-          setOrder(null)
-        }
-        setLoading(false)
-      }
-    }
-    fetchOrder()
-  }, [token, confirmante])
-
-  return {order, loadingOrder}
 }
 
 const breadCrumb = [
