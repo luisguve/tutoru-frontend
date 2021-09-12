@@ -5,7 +5,7 @@ import EstructuraPagina from '../components/EstructuraPagina'
 import ListaEjercicios from '../components/categorias/ListaEjercicios'
 import utilStyles from '../styles/utils.module.css'
 import { getCategorias } from "../lib/contenidos"
-import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
+import { cargarInformacionSitio, cargarNavItems, covers } from "../lib/metadata"
 
 export async function getStaticProps() {
   const portadas = await getCategorias()
@@ -27,7 +27,6 @@ export default function Home(props) {
     const {
       Titulo_url,
       Titulo_normal,
-      thumbnail,
       ejercicios
     } = datos
 
@@ -43,7 +42,7 @@ export default function Home(props) {
         <div className={thumbnailClass.concat(" me-1")}>
           <Link href={`/${Titulo_url}`}>
             <a>
-              <img src={`http://localhost:1337${thumbnail.url}`} alt={thumbnail.alt} />
+              <img src={covers[Titulo_url]} alt={`Portada ${Titulo_normal}`} />
             </a>
           </Link>
         </div>
