@@ -32,7 +32,7 @@ const breadCrumb = [
 ]
 
 export default function Cuenta({ navItems, informacionSitio }) {
-  const { user, loadingUser, token, logoutUser } = useContext(AuthContext)
+  const { user, token, logoutUser } = useContext(AuthContext)
 
   const {
     orders, loadingOrders,
@@ -41,7 +41,7 @@ export default function Cuenta({ navItems, informacionSitio }) {
 
   const { Titulo_sitio } = informacionSitio
 
-  if (!user && !loadingUser) {
+  if (!user) {
     return (
       <EstructuraPagina
         navItems={navItems}
@@ -64,11 +64,6 @@ export default function Cuenta({ navItems, informacionSitio }) {
       <Head><title>{Titulo_sitio} | Mi cuenta</title></Head>
       <div>
         {
-          loadingUser ?
-          <h4 className="text-center">
-            Cargando usuario...
-          </h4>
-          :
           <>
             <div className="d-flex justify-content-end">
               <button
@@ -76,9 +71,7 @@ export default function Cuenta({ navItems, informacionSitio }) {
                 onClick={() => logoutUser()}
               >salir</button>
             </div>
-            <h5 className="text-center">
-              Iniciaste sesión como {user.email}
-            </h5>
+            <h5 className="text-center">Iniciaste sesión como {user.email}</h5>
           </>
         }
         {

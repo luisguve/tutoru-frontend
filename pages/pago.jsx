@@ -35,7 +35,6 @@ export default function Pago({navItems, informacionSitio}) {
 
   const router = useRouter()
   const { confirmante } = router.query
-  const { loadingUser, loadingToken } = useContext(AuthContext)
   const { order, loadingOrder } = useOrder(confirmante)
 
   const { Titulo_sitio } = informacionSitio
@@ -56,7 +55,7 @@ export default function Pago({navItems, informacionSitio}) {
             !confirmante ?
               "Confirmante invalido"
             :
-              loadingUser || loadingOrder || loadingToken ? "Confirmando pago..."
+              loadingOrder ? "Confirmando pago..."
               :
               order ? "¡Compra exitosa!" : "El pago no pudo ser confirmado"
           }

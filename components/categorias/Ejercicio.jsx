@@ -37,7 +37,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
   } = useSolucion(id, enSeccion, irSolucion)
 
   const { loadingIDsEjercicios } = useContext(EjerciciosContext)
-  const { user, loadingUser } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
   const baseURL = arbolCategorias.join("/")
   const ejercicioURL = `/${baseURL}/${slug}`
@@ -57,7 +57,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
           </>
       }
       {
-        (!user && !loadingUser) ? // No hay sesion activa
+        (!user) ? // No hay sesion activa
           <>
             <strong>${precio}</strong>
             {
@@ -70,7 +70,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
             }
           </>
         :
-          (loadingUser || loadingIDsEjercicios) && !solucionDisponible ?
+          loadingIDsEjercicios && !solucionDisponible ?
             // El usuario esta cargando
             <>
               <strong>${precio}</strong> 

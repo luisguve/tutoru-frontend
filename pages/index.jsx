@@ -27,7 +27,8 @@ export default function Home(props) {
     const {
       Titulo_url,
       Titulo_normal,
-      ejercicios
+      ejercicios,
+      cursos
     } = datos
 
     const thumbnailClass = ejercicios.planteamientos.length ? "float-start" : "d-flex justify-content-center"
@@ -49,6 +50,10 @@ export default function Home(props) {
         {
           (ejercicios.planteamientos.length > 0) && 
           <ListaEjercicios irSolucion={false} muestras={ejercicios.planteamientos} />
+        }
+        {
+          (cursos.length > 0) &&
+          <CarruselCursos categoria={Titulo_url} cursos={cursos} />
         }
       </li>
     )
@@ -76,4 +81,16 @@ export default function Home(props) {
       </section>
     </EstructuraPagina>
   )
+}
+
+const CarruselCursos = ({categoria, cursos}) => {
+  return cursos.map(c => {
+    return (
+      <div key={c.slug}>
+        <Link href={`/${categoria}/cursos/${c.slug}`}>
+          <a>{c.titulo}</a>
+        </Link>
+      </div>
+    )
+  })
 }

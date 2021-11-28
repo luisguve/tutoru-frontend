@@ -16,7 +16,10 @@ const Estaticos = () => {
   const { user, loginUser: login } = useContext(AuthContext)
   const { openModal, closeModal } = useContext(LoginContext)
   const iniciar = () => {
-    openModal()
+    openModal("inicio")
+  }
+  const registrar = () => {
+    openModal("registro")
   }
   return (
     <>
@@ -27,15 +30,25 @@ const Estaticos = () => {
           <CuentaDesktop />
         </>
         :
-        <li className="nav-item d-flex align-items-center">
-          <button
-            className="btn btn-secondary mt-1 mb-2 my-lg-0"
-            onClick={iniciar}
-          >
-            Iniciar sesión
-          </button>
-        </li>
-      }
+        <>
+          <li className="nav-item d-flex align-items-center">
+            <button
+              className="btn btn-primary mt-1 mb-2 my-lg-0"
+              onClick={iniciar}
+            >
+              Iniciar sesión
+            </button>
+          </li>
+          <li className="nav-item d-flex align-items-center ms-lg-2">
+            <button
+              className="btn btn-secondary mt-1 mb-2 my-lg-0"
+              onClick={registrar}
+            >
+              Registrarse
+            </button>
+          </li>
+        </>
+      }      
       <BotonVerCarrito />
     </>
   )

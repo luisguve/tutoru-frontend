@@ -6,21 +6,31 @@ const LoginContext = createContext()
 
 export const LoginProvider = props => {
   const { user } = useContext(AuthContext)
-  const [isOpen, setIsOpen] = useState(false)
+  const [status, setStatus] = useState({isOpen: false})
   useEffect(() => {
     if (user) {
-      setIsOpen(false)
+      setStatus({isOpen: false})
     }
   }, [user])
 
-  const openModal = () => {
-    setIsOpen(true)
+  const openModal = (accion) => {
+    setStatus({
+      isOpen: true,
+      accion
+    })
   }
   const closeModal = () => {
-    setIsOpen(false)
+    setStatus({
+      isOpen: false
+    })
   }
 
-  return <LoginContext.Provider value={{isOpen, openModal, closeModal}}>
+  return <LoginContext.Provider value={{
+    isOpen: status.isOpen,
+    accion: status.accion,
+    openModal,
+    closeModal
+  }}>
     {props.children}
   </LoginContext.Provider>
 }

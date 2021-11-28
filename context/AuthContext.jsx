@@ -1,49 +1,39 @@
 import { createContext, useState, useEffect } from "react"
 import { useRouter } from "next/router"
-import { Magic } from "magic-sdk"
 import { useToasts } from 'react-toast-notifications';
 
-import { STRAPI, MAGIC_PUBLIC_KEY } from "../lib/urls"
+import { STRAPI } from "../lib/urls"
 
 const AuthContext = createContext()
 
-let magic
 export const AuthProvider = props => {
 
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
-  const [loadingUser, setLoadingUser] = useState(false)
   const [loadingToken, setLoadingToken] = useState(false)
   const router = useRouter()
 
   const { addToast } = useToasts()
 
-  const loginUser = async email => {
-    try {
-      await magic.auth.loginWithMagicLink({ email })
-      setUser({ email })
-      addToast("Logged in as " + email, { appearance: 'success' })
-      guardarSesion(email)
-      loadToken()
-      router.push("/")
-    } catch (err) {
-      setUser(null)
-    }
+  const loginUser = ({email, token}) => {
+    setUser({ email })
+    guardarSesion(email)
+    guardarToken(token)
+    setToken(token)
   }
 
   const logoutUser = async () => {
-    try {
-      await magic.user.logout()
-      limpiarToken()
-      limpiarSesion()
-      addToast("Cerraste sesion", { appearance: 'info' })
-      setToken(null)
-      setUser(null)
-      router.push("/")
-    } catch (err) {}
+    limpiarToken()
+    limpiarSesion()
+    addToast("Cerraste sesión", { appearance: 'info' })
+    setToken(null)
+    setUser(null)
   }
 
-  const checkIsLoggedIn = async () => {
+  /**
+  * Try to get user data from local storage
+  */
+  const checkIsLoggedIn = () => {
     const { data: sesionData } = obtenerSesion()
     let sesionRecuperada = false
     if (sesionData) {
@@ -51,8 +41,8 @@ export const AuthProvider = props => {
       setUser({ email })
       sesionRecuperada = true
     }
-    let tokenRecuperado = false
     const { data: tokenData } = obtenerToken()
+    let tokenRecuperado = false
     if (tokenData) {
       const { token, createdAt } = tokenData
       const diferenciaMs = Date.now() - createdAt
@@ -62,74 +52,24 @@ export const AuthProvider = props => {
         limpiarToken()
       } else {
         // Guarda el token en el contexto
-        tokenRecuperado = true
         setToken(token)
+        tokenRecuperado = true
       }
     }
-    try {
-      addToast("Verificando sesión", { appearance: 'info' })
-      const isLoggedIn = await magic.user.isLoggedIn()
-
-      if (isLoggedIn) {
-        addToast("Sesión activa", { appearance: "success" })
-        // Carga la sesion de usuario si no ha sido recuperada del localStorage.
-        if (!sesionRecuperada) {
-          await loadSession()
-        }
-        if (!tokenRecuperado) {
-          await loadToken()
-        }
-      } else {
-        addToast("Inicia sesión para comprar", { appearance: 'info' })
-        limpiarSesion()
-        limpiarToken()
-        setUser(null)
-        setToken(null)
-      }
-    } catch (err) {
-      console.log(err)
-      addToast("No se pudo obtener informacion sobre la sesión", { appearance: 'error' })
+    if (!sesionRecuperada || !tokenRecuperado) {
+      limpiarToken()
+      limpiarSesion()
+      setToken(null)
+      setUser(null)
     }
-    setLoadingUser(false)
-  }
-
-  const loadSession = async () => {
-    setLoadingUser(true)
-    addToast("Recuperando sesión", { appearance: 'info' })
-    const { email } = await magic.user.getMetadata()
-    addToast("Sesión iniciada como " + email, { appearance: 'success' })
-    setUser({ email })
-    setLoadingUser(false)
-    guardarSesion(email)
-  }
-  const loadToken = async () => {
-    setLoadingToken(true)
-    const newToken = await getToken()
-    setToken(newToken)
-    setLoadingToken(false)
-    guardarToken(newToken)
-  }
-
-  const getToken = async () => {
-    try {
-      addToast("Obteniendo token de acceso", { appearance: 'info' })
-      const newToken = await magic.user.getIdToken({ lifespan: 86400 /*24h*/ })
-      addToast("Token obtenida", { appearance: 'success' })
-      return newToken
-    } catch (err) {
-      console.log(err)
-      addToast("No se pudo obtener token", { appearance: 'warning' })
-    }
-    return null
   }
 
   useEffect(() => {
-    magic = new Magic(MAGIC_PUBLIC_KEY)
     checkIsLoggedIn()
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser, loadingToken, loadToken }}>
+    <AuthContext.Provider value={{ user, token, loginUser, logoutUser }}>
       {props.children}
     </AuthContext.Provider>
   )

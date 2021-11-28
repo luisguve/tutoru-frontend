@@ -4,7 +4,7 @@ import AuthContext from "../context/AuthContext"
 import CarritoContext from "../context/CarritoContext"
 
 export default function BotonComprar({ ejercicio }) {
-  const { user, loadingUser } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
   const { articulosIDs, agregar, quitar } = useContext(CarritoContext)
   const [agregado, setAgregado] = useState(() => {
     for (let i = articulosIDs.length - 1; i >= 0; i--) {

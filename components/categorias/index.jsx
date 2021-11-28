@@ -14,6 +14,8 @@ export default function Categoria({props}) {
     contenido,
     indice,
     esCategoria,
+    esReproduccionCurso,
+    esPresentacionCurso,
     navItems,
     breadCrumb,
     tituloCabecera,
@@ -21,18 +23,26 @@ export default function Categoria({props}) {
     informacionSitio: { Titulo_sitio: titulo },
   } = props
 
-  // Categoria o ejercicio?
-  const componente = esCategoria ?
-  <PaginaCategoria
-    titulo={indice.Titulo_normal}
-    subcategorias={indice.hijos}
-    resumen={contenido.resumen}
-  />
-  :
-  <Ejercicio
-    contenido={contenido.ejercicio}
-    enSeccion={false}
-  />
+  // Categoria, reproduccion de curso, presentacion de curso o ejercicio?
+  let componente = null
+  if (esCategoria) {
+    componente = 
+    <PaginaCategoria
+      titulo={indice.Titulo_normal}
+      subcategorias={indice.hijos}
+      resumen={contenido.resumen}
+    />
+  } else if (esReproduccionCurso) {
+    componente = <PaginaReproduccionCurso />
+  } else if (esPresentacionCurso) {
+    componente = <PaginaPresentacionCurso />
+  } else {
+    componente =
+    <Ejercicio
+      contenido={contenido.ejercicio}
+      enSeccion={false}
+    />
+  }
 
   return (
     <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb} titulo={titulo} header={indice.Titulo_normal}>
@@ -42,4 +52,12 @@ export default function Categoria({props}) {
       {componente}
     </EstructuraPagina>
   )
+}
+
+const PaginaReproduccionCurso = () => {
+  return <h1>ver curso</h1>
+}
+
+const PaginaPresentacionCurso = () => {
+  return <h1>pres de curso</h1>
 }
