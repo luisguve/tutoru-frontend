@@ -1,11 +1,12 @@
 import { useContext, useState } from "react"
+import { useRouter } from "next/router"
 import { useToasts } from "react-toast-notifications"
 import { loadStripe } from "@stripe/stripe-js"
 
 import AuthContext from "../context/AuthContext"
 import CarritoContext from "../context/CarritoContext"
 import { useInformacion } from "../hooks/carrito"
-import { limpiarSesion as limparEjerciciosComprados } from "../context/EjerciciosContext"
+import { limpiarSesion as limparArticulosComprados } from "../context/ArticulosContext"
 import styles from "../styles/Carrito.module.scss"
 import { STRIPE_PK, STRAPI } from "../lib/urls"
 import BotonCarrito from "./BotonCarrito"
@@ -22,6 +23,7 @@ export default function Carrito() {
     classContenedorCarrito,
     setClass,
   } = useContext(CarritoContext)
+  const router = useRouter()
   const cerrarCarrito = () => {
     setPaso1(false)
     setPaso2(false)
@@ -44,16 +46,34 @@ export default function Carrito() {
       return null
     }
     const botonQuitar = articulo => {
-      return editable ? <>| <button onClick={() => quitar(articulo)}>quitar</button></>
+      return editable ?
+        <button
+          className="btn btn-outline-danger py-0"
+          onClick={() => quitar(articulo)}
+        >Quitar</button>
       : null
     }
     return informacion.articulos.map(articulo => {
+      // Coloca el nombre de la categoria si el articulo no es un curso
+      const label = articulo.videos ?
+        articulo.titulo
+      : articulo.categoria.Titulo_normal + ` - ${articulo.titulo}`
       return (
-        <div key={articulo.slug}>
-          <h6>${articulo.precio} | {articulo.titulo} {botonQuitar(articulo)} </h6>
+        <div
+          className="w-100 d-flex justify-content-between align-items-center mb-1"
+          key={articulo.slug}
+        >
+          <span>${articulo.precio}</span>
+          <span className="mx-2 mx-lg-4">{label}</span>
+          <span>{botonQuitar(articulo)}</span>
         </div>
       )
     })
+  }
+
+  // No mostrar el icono si estamos en la pagina de reproduccion de un curso
+  if (router.asPath.endsWith("/ver")) {
+    return null
   }
 
   return (
@@ -88,7 +108,7 @@ export default function Carrito() {
   )
 }
 
-// Ventana de confirmacion
+// Paso 1: ventana de confirmacion
 // En esta ventana se pueden quitar los articulos
 const Confirmacion = props => {
   const { user } = useContext(AuthContext)
@@ -106,7 +126,7 @@ const Confirmacion = props => {
             <h4 className="text-center">Total a pagar: ${informacion.total}</h4>
             <div className="d-flex flex-column w-75 mt-2">
               <button
-                className="btn btn-secondary"
+                className="btn btn-outline-primary"
                 onClick={() => limpiar()}
               >Limpiar carrito</button>
               <button
@@ -123,7 +143,7 @@ const Confirmacion = props => {
   )
 }
 
-// Ventana de checkout
+// Paso 2: ventana de checkout
 // En esta ventana no se pueden quitar los articulos
 // El usuario selecciona el metodo de pago y se redirige al checkout
 const Checkout = props => {
@@ -141,6 +161,16 @@ const Checkout = props => {
   const pagar = async () => {
     setDisabled("disabled")
     try {
+      const ejerciciosIDs = []
+      const cursosIDs = []
+      const prefijoCurso = "curso--"
+      articulosIDs.map(({ id }) => {
+        if (id.startsWith(prefijoCurso)) {
+          cursosIDs.push(id.replace(prefijoCurso, ""))
+        } else {
+          ejerciciosIDs.push(id)
+        }
+      })
       const stripe = await stripePromise
 
       const orderUrl = `${STRAPI}/orders`
@@ -151,7 +181,8 @@ const Checkout = props => {
           "Content-type": "application/json"
         },
         body: JSON.stringify({
-          ejercicios: articulosIDs
+          ejercicios: ejerciciosIDs,
+          cursos: cursosIDs
         })
       }
 
@@ -162,7 +193,7 @@ const Checkout = props => {
       if (id) {
         addToast("Redireccionando a stripe", { appearance: "success" })
         limpiarCarrito()
-        limparEjerciciosComprados()
+        limparArticulosComprados()
         await stripe.redirectToCheckout({
           sessionId: id
         })
