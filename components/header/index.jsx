@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import Link from "next/link"
 
 import styles from "../../styles/Header.module.scss"
 
@@ -68,7 +69,7 @@ const Navbar = ({ navItems, titulo }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/#">{titulo}</a>
+        <Link href="/"><a className="navbar-brand">{titulo}</a></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main_nav"  aria-expanded="false" aria-label="Toggle navigation">
         <span className="navbar-toggler-icon"></span>
         </button>

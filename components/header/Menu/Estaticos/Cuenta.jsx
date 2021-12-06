@@ -60,10 +60,12 @@ export const CuentaDesktop = () => {
         aria-labelledby="cuentaDropdown"
         className={showClass.concat(" dropdown-menu")}
       >
-        <li><a className="dropdown-item" href="/cuenta">Ver cuenta</a></li>
+        <li>
+          <Link href="/cuenta"><a className="dropdown-item">Ver cuenta</a></Link>
+        </li>
         <li>
           <button
-            className="btn btn-secondary mt-1 mb-2 my-lg-0 dropdown-item" href="#"
+            className="btn btn-secondary mt-1 mb-2 my-lg-0 dropdown-item"
             onClick={() => logoutUser()}
           >
             Cerrar sesión
