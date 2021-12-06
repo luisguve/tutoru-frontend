@@ -37,7 +37,7 @@ export default function BotonComprar({ articulo }) {
     setAgregado(agg)
   }, [articulosIDs])
   if (!user) {
-    return <p>Inicia sesion para comprar este articulo</p>
+    return <p className="mb-0">Inicia sesion para comprar este articulo</p>
   }
   return (
     agregado ?
