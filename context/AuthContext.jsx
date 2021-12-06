@@ -9,6 +9,7 @@ const AuthContext = createContext()
 export const AuthProvider = props => {
 
   const [user, setUser] = useState(null)
+  const [loadingUser, setLoadingUser] = useState(true)
   const [token, setToken] = useState(null)
   const router = useRouter()
 
@@ -65,10 +66,11 @@ export const AuthProvider = props => {
 
   useEffect(() => {
     checkIsLoggedIn()
+    setLoadingUser(false)
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, token, loginUser, logoutUser }}>
+    <AuthContext.Provider value={{ user, token, loadingUser, loginUser, logoutUser }}>
       {props.children}
     </AuthContext.Provider>
   )
