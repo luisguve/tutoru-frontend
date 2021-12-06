@@ -42,30 +42,24 @@ const PaginaCurso = (props) => {
         <div className="row flex-column-reverse flex-lg-row mt-2 mt-lg-5 mx-0">
           <div className="col-lg-6">
             {
-              !user ? // No hay sesion activa
+              loadingIDsArticulos && !cursoComprado ?
+                // El usuario esta cargando
                 <>
-                  <strong>${precio}</strong>
-                  <p>Inicia sesión para comprar este ejercicio</p>
+                  <strong>${precio}</strong> 
+                  <p>Cargando usuario...</p>
                 </>
               :
-                loadingIDsArticulos && !cursoComprado ?
-                  // El usuario esta cargando
-                  <>
-                    <strong>${precio}</strong> 
-                    <p>Cargando usuario...</p>
-                  </>
+                cursoComprado ?
+                  // El usuario adquirió este curso
+                  <Link href={verCursoURL}>
+                    <a>Ir al curso</a>
+                  </Link>
                 :
-                  cursoComprado ?
-                    // El usuario adquirió este curso
-                    <Link href={verCursoURL}>
-                      <a>Ir al curso</a>
-                    </Link>
-                  :
-                    // El usuario no tiene acceso a este curso
-                    <>
-                      <strong>${precio}</strong>
-                      <div><BotonAgregarCarrito articulo={props.resumen} /></div>
-                    </>
+                  // El usuario no tiene acceso a este curso
+                  <>
+                    <strong>${precio}</strong>
+                    <div><BotonAgregarCarrito articulo={props.resumen} /></div>
+                  </>
             }
             <p>{clases} clases - {formatDuration(duracion*1000)}</p>
             {
@@ -109,6 +103,7 @@ export const MetadataCurso = ({data}) => {
           activeColor="#ffd700"
           value={rating}
           size={32}
+          isHalf={true}
           edit={false}
         />
         {
