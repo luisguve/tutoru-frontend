@@ -5,7 +5,7 @@ import Head from "next/head"
 import { STRAPI } from "../lib/urls"
 import AuthContext from "../context/AuthContext"
 import EstructuraPagina from "../components/EstructuraPagina"
-import ListaEjerciciosClasificados from "../components/categorias/ListaEjerciciosClasificados"
+import ListaArticulosClasificados from "../components/categorias/ListaArticulosClasificados"
 import { useHistorialCompras } from "../hooks/historial"
 import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
 
@@ -36,7 +36,8 @@ export default function Cuenta({ navItems, informacionSitio }) {
 
   const {
     orders, loadingOrders,
-    ejercicios, loadingEjercicios
+    articulos: { ejercicios, cursos },
+    loadingArticulos
   } = useHistorialCompras(token)
 
   const { Titulo_sitio } = informacionSitio
@@ -75,7 +76,7 @@ export default function Cuenta({ navItems, informacionSitio }) {
           </>
         }
         {
-          loadingEjercicios ?
+          loadingArticulos ?
           <h4 className="text-center">
             Cargando tus ejercicios...
           </h4>
@@ -86,8 +87,12 @@ export default function Cuenta({ navItems, informacionSitio }) {
             </h4>
           :
             <div className="my-5">
-              <h2 className="text-center mb-3">Tus ejercicios</h2>
-              <ListaEjerciciosClasificados irSolucion={true} muestras={ejercicios} />
+              <h2 className="text-center mb-3">Tu contenido de estudio</h2>
+              <ListaArticulosClasificados
+                irSolucion={true}
+                muestras={ejercicios}
+                cursos={cursos}
+              />
             </div>
         }
         {

@@ -4,8 +4,11 @@ import { ToastProvider } from 'react-toast-notifications'
 import '../styles/global.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+
 import { AuthProvider } from "../context/AuthContext"
-import { EjerciciosProvider } from "../context/EjerciciosContext"
+import { ArticulosProvider } from "../context/ArticulosContext"
 import { CarritoProvider } from "../context/CarritoContext"
 import { LoginProvider } from "../context/LoginContext"
 import Carrito from "../components/Carrito"
@@ -18,7 +21,7 @@ export default function App({ Component, pageProps }) {
   return (
     <ToastProvider>
       <AuthProvider>
-        <EjerciciosProvider>
+        <ArticulosProvider>
           <CarritoProvider>
             <LoginProvider>
               <Component {...pageProps} />
@@ -26,7 +29,7 @@ export default function App({ Component, pageProps }) {
               <LoginModal />
             </LoginProvider>
           </CarritoProvider>
-        </EjerciciosProvider>
+        </ArticulosProvider>
       </AuthProvider>
     </ToastProvider>
   )

@@ -10,8 +10,8 @@ export const useHistorialCompras = token => {
   const [orders, setOrders] = useState(null)
   const [loadingOrders, setLoadingOrders] = useState(false)
 
-  const [ejercicios, setEjercicios] = useState(null)
-  const [loadingEjercicios, setLoadingEjercicios] = useState(false)
+  const [articulos, setArticulos] = useState({ejercicios: null, cursos: null})
+  const [loadingArticulos, setLoadingArticulos] = useState(false)
 
   useEffect(() => {
     const fetchOrders = async token => {
@@ -33,20 +33,20 @@ export const useHistorialCompras = token => {
     }
     const fetchEjercicios = async token => {
       try {
-        setLoadingEjercicios(true)
-        const ejerciciosUrl = `${STRAPI}/ejercicios/comprados`
+        setLoadingArticulos(true)
+        const ejerciciosUrl = `${STRAPI}/user-data/comprados`
         const ejercicios_res = await fetch(ejerciciosUrl, {
           headers: {
             "Authorization": `Bearer ${token}`
           }
         })
         const data = await ejercicios_res.json()
-        setEjercicios(data)
+        setArticulos(data)
       } catch (err) {
         console.log(err)
-        setEjercicios(null)
+        setArticulos(null)
       }
-      setLoadingEjercicios(false)
+      setLoadingArticulos(false)
     }
     if (token) {
       fetchEjercicios(token)
@@ -56,6 +56,6 @@ export const useHistorialCompras = token => {
 
   return {
     orders, loadingOrders,
-    ejercicios, loadingEjercicios
+    articulos, loadingArticulos
   }
 }

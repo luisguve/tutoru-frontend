@@ -1,7 +1,7 @@
 import { createContext, useEffect, useContext, useState } from "react"
 
 import AuthContext from "./AuthContext"
-import EjerciciosContext from "./EjerciciosContext"
+import ArticulosContext from "./ArticulosContext"
 
 import styles from "../styles/Carrito.module.scss"
 
@@ -9,17 +9,50 @@ const CarritoContext = createContext()
 
 export const CarritoProvider = props => {
   const { user } = useContext(AuthContext)
-  const { IDsEjercicios: comprados } = useContext(EjerciciosContext)
-  const [articulos, setArticulos] = useState([])
-  const [articulosIDs, setArticulosIDs] = useState([])
+  const {
+    IDsEjercicios: ejerciciosComprados,
+    IDsCursos: cursosComprados
+  } = useContext(ArticulosContext)
+
+  const [articulos, setArticulos] = useState(() => {
+    if (user) {
+      const { data: carritoData } = obtenerSesion()
+      if (carritoData) {
+        const { articulos } = carritoData
+        if (articulos) {
+          return articulos
+        }
+      }
+    }
+    return []
+  })
+  const [articulosIDs, setArticulosIDs] = useState(() => {
+    if (user) {
+      const { data: carritoData } = obtenerSesion()
+      if (carritoData) {
+        const { articulosIDs } = carritoData
+        if (articulosIDs) {
+          return articulosIDs
+        }
+      }
+    }
+    return []
+  })
 
   const [paso1, setPaso1] = useState(false)
   const [paso2, setPaso2] = useState(false)
   const [classContenedorCarrito, setClass] = useState(styles.Contenedor__Carrito)
 
-  const agregar = articulo => {
+  const agregar = art => {
+    const articulo = JSON.parse(JSON.stringify(art))
+    let prefijo = ""
+    // Coloca un prefijo para diferenciar los ejercicios de los cursos.
+    if (articulo.videos) {
+      prefijo = "curso--"
+    }
+    articulo.id = prefijo.concat(articulo.id)
     for (let i = articulosIDs.length - 1; i >= 0; i--) {
-      if (articulosIDs[i].id === articulo.id) return
+      if (articulosIDs[i].id === prefijo.concat(articulo.id)) return
     }
     const nuevosArticulos = [...articulos, articulo]
     setArticulos(nuevosArticulos)
@@ -29,9 +62,16 @@ export const CarritoProvider = props => {
   }
 
   const quitar = articulo => {
-    const nuevosArticulos = articulos.filter(a => a.id !== articulo.id)
+    let articuloID = articulo.id
+    // Coloca un prefijo para diferenciar los ejercicios de los cursos.
+    if (
+      articulo.videos && !articulo.id.toString().startsWith("curso--")
+    ) {
+      articuloID = "curso--".concat(articulo.id)
+    }
+    const nuevosArticulos = articulos.filter(a => a.id != articuloID)
     setArticulos(nuevosArticulos)
-    const nuevosIDs = articulosIDs.filter(a => a.id !== articulo.id)
+    const nuevosIDs = articulosIDs.filter(a => a.id != articuloID)
     setArticulosIDs(nuevosIDs)
     guardarSesion(nuevosArticulos, nuevosIDs)
   }
@@ -60,15 +100,22 @@ export const CarritoProvider = props => {
     }
   }, [user])
   useEffect(() => {
-    // Elimina los ejercicios que ha comprado el usuario del carrito de compras.
-    if (comprados) {
+    // Elimina los articulos que ha comprado el usuario del carrito de compras.
+    if (ejerciciosComprados) {
       articulosIDs.map(a => {
-        if (comprados.includes(c => c.id === a.id)) {
+        if (ejerciciosComprados.includes(c => c.id === a.id)) {
           quitar(a)
         }
       })
     }
-  }, [comprados])
+    if (cursosComprados) {
+      articulosIDs.map(a => {
+        if (cursosComprados.includes(a.id)) {
+          quitar(a)
+        }
+      })
+    }
+  }, [ejerciciosComprados, cursosComprados])
 
   return (
     <CarritoContext.Provider

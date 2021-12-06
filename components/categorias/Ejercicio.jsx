@@ -3,10 +3,10 @@ import { useToasts } from "react-toast-notifications"
 import Link from "next/link"
 
 import AuthContext from "../../context/AuthContext"
-import EjerciciosContext from "../../context/EjerciciosContext"
+import ArticulosContext from "../../context/ArticulosContext"
 import BotonAgregarCarrito from "../BotonAgregarCarrito"
 import utilStyles from "../../styles/utils.module.css"
-import { useSolucion } from "../../hooks/solucion"
+import { useSolucion } from "../../hooks/articulo"
 
 /**
 * Este componente muestra la descripcion del ejercicio y un boton de compra
@@ -36,7 +36,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
     loadingSolucion
   } = useSolucion(id, enSeccion, irSolucion)
 
-  const { loadingIDsEjercicios } = useContext(EjerciciosContext)
+  const { loadingIDsArticulos } = useContext(ArticulosContext)
   const { user } = useContext(AuthContext)
 
   const baseURL = arbolCategorias.join("/")
@@ -70,7 +70,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
             }
           </>
         :
-          loadingIDsEjercicios && !solucionDisponible ?
+          loadingIDsArticulos && !solucionDisponible ?
             // El usuario esta cargando
             <>
               <strong>${precio}</strong> 
@@ -100,7 +100,7 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
               // El usuario no tiene acceso a la solucion de este ejercicio
               <>
                 <p><strong>${precio}</strong></p>
-                <div><BotonAgregarCarrito ejercicio={contenido} /></div>
+                <div><BotonAgregarCarrito articulo={contenido} /></div>
               </>
       }
     </>
