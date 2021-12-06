@@ -10,14 +10,13 @@ export const AuthProvider = props => {
 
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
-  const [loadingToken, setLoadingToken] = useState(false)
   const router = useRouter()
 
   const { addToast } = useToasts()
 
-  const loginUser = ({email, token}) => {
-    setUser({ email })
-    guardarSesion(email)
+  const loginUser = ({email, id, token}) => {
+    setUser({ email, id })
+    guardarSesion(email, id)
     guardarToken(token)
     setToken(token)
   }
@@ -37,8 +36,8 @@ export const AuthProvider = props => {
     const { data: sesionData } = obtenerSesion()
     let sesionRecuperada = false
     if (sesionData) {
-      const { email } = sesionData
-      setUser({ email })
+      const { email, id } = sesionData
+      setUser({ email, id })
       sesionRecuperada = true
     }
     const { data: tokenData } = obtenerToken()
@@ -85,12 +84,13 @@ const obtenerSesion = () => {
   }
   return {}
 }
-const guardarSesion = email => {
+const guardarSesion = (email, id) => {
   if (typeof(Storage) !== undefined) {
     const data = JSON.parse(localStorage.getItem("data"))
     localStorage.setItem("data", JSON.stringify({
       ...data,
-      email
+      email,
+      id
     }))
   }
 }

@@ -65,6 +65,7 @@ const RegisterForm = () => {
       addToast('Registrado exitosamente', {appearance: "success"})
       loginUser({
         email: `${data.user.username} (${data.user.email})`,
+        id: data.user.id,
         token: data.jwt
       })
     })
@@ -176,6 +177,7 @@ const LoginForm = () => {
       // Handle success.
       loginUser({
         email: `${data.user.username} (${data.user.email})`,
+        id: data.user.id,
         token: data.jwt
       })
     })
