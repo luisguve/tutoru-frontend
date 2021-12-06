@@ -10,11 +10,11 @@ const Footer = () => {
     <footer className="py-4">
       {
         user &&
-        <h6 className="user-info">
+        <p className="user-info small">
           <Link href="/cuenta"><a>Iniciaste como {user.email}</a></Link>
-        </h6>
+        </p>
       }
-      <h6 className="m-0">Tutor universitario - copyright 2021</h6>
+      <p className="m-0 fs-6">Tutor universitario - copyright 2021</p>
     </footer>
   )
 }

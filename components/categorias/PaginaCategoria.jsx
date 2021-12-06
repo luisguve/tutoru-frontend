@@ -33,7 +33,7 @@ export default function PaginaCategoria(props) {
 
   return (
     <section>
-      <h2 className="text-center mt-4 mt-lg-1 mb-2 mb-lg-5">{tituloResumen}</h2>
+      <h2 className="text-center mt-4 mt-lg-1 mb-2 mb-lg-5 fs-4">{tituloResumen}</h2>
       {
         (subcategorias.length > 0) &&
         <div className="my-4">
