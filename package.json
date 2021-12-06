@@ -12,8 +12,11 @@
     "@stripe/stripe-js": "^1.16.0",
     "bootstrap": "^5.0.0-beta3",
     "date-fns": "^2.22.1",
+    "fetch-js-from-cdn": "^0.2.0",
+    "format-duration": "^1.4.0",
     "gray-matter": "^4.0.3",
     "imagemin-mozjpeg": "^9.0.0",
+    "jquery": "^3.6.0",
     "materialize-css": "^1.0.0-rc.2",
     "next": "^10.0.0",
     "next-compose-plugins": "^2.2.1",
@@ -21,10 +24,14 @@
     "react": "17.0.1",
     "react-async": "^10.0.1",
     "react-dom": "17.0.1",
+    "react-rating-stars-component": "^2.2.0",
+    "react-responsive-carousel": "^3.2.22",
+    "react-slick": "^0.28.1",
     "react-toast-notifications": "^2.5.1",
     "remark": "^13.0.0",
     "remark-html": "^13.0.1",
-    "sass": "^1.37.5"
+    "sass": "^1.37.5",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",
