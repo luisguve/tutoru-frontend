@@ -50,6 +50,7 @@ export default function EstructuraPagina(props) {
 }
 
 const Breadcrumb = ({elements, isHome}) => {
+  const containerClass = "mt-3 mt-md-5 px-2 px-md-0 ms-1 ms-md-0 small"
   if (elements) {
     const links = elements.map((e, i) => {
       return (
@@ -67,14 +68,14 @@ const Breadcrumb = ({elements, isHome}) => {
       )
     })
     return (
-      <div className="mt-3 mt-md-5">
+      <div className={containerClass}>
         {links}
       </div>
     )
   }
   if (!isHome) {
     return (
-      <div className="mt-3 mt-md-5 px-2 px-md-0">
+      <div className={containerClass}>
         <Link href="/">
           <a>← Inicio</a>
         </Link>
