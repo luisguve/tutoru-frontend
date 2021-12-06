@@ -4,6 +4,10 @@
     padding: 0 1rem;
     margin: 3rem auto 6rem;
   }
+  .container.container-rep {
+    max-width: 100%;
+    padding: 0;
+  }
 }
 .container {
   margin-top: 4rem;
