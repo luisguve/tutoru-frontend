@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react"
 import { useToasts } from "react-toast-notifications"
 
 import AuthContext from "../context/AuthContext"
-import EjerciciosContext from "../context/EjerciciosContext"
+import { limpiarSesion } from "../context/ArticulosContext"
 import { STRAPI } from "../lib/urls"
 
 /**
@@ -16,7 +16,6 @@ export const useOrder = (confirmante) => {
   const [loadingOrder, setLoading] = useState(false)
 
   const { token } = useContext(AuthContext)
-  const { limpiar } = useContext(EjerciciosContext)
   const { addToast } = useToasts()
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export const useOrder = (confirmante) => {
           })
           const data = await order_res.json()
           addToast("¡Pago confirmado!", {appearance: "success"})
-          limpiar()
+          limpiarSesion()
           setOrder(data)
         } catch (err) {
           console.log(err)
