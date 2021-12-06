@@ -37,14 +37,10 @@ const TabPreguntas = ({data, cursoID}) => {
   useEffect(() => {
     if (dataPreguntas) {
       const totalPreguntas = dataPreguntas.reduce((col, pregunta) => {
-        const nuevaPregunta = (
-          <div className="d-flex align-items-center mb-1" key={pregunta.id}>
-            <p className="border rounded-3 py-3 px-2 mb-0">
-              {pregunta.contenido}
-            </p>
-          </div>
-        )
-        return [nuevaPregunta, ...col]
+        return [
+          <Comentario pregunta={pregunta} key={pregunta.id} />,
+          ...col
+        ]
       }, [])
       setPreguntas(totalPreguntas)
     }
@@ -52,13 +48,10 @@ const TabPreguntas = ({data, cursoID}) => {
   useEffect(() => {
     if (dataPreguntasUsuario) {
       const totalPreguntas = dataPreguntasUsuario.reduce((col, pregunta) => {
-        const nuevaPreguntaUsuario = (
-          <div className="d-flex align-items-center mb-1" key={pregunta.id}>
-            <span className="me-1"><strong>Tú:</strong></span>
-            <p className="border rounded-3 py-3 px-2 mb-0">{pregunta.contenido}</p>
-          </div>
-        )
-        return [nuevaPreguntaUsuario, ...col]
+        return [
+          <Comentario pregunta={pregunta} delUsuario={true} key={pregunta.id} />,
+          ...col
+        ]
       }, [])
       setPreguntasUsuario(totalPreguntas)
     }
@@ -78,7 +71,7 @@ const TabPreguntas = ({data, cursoID}) => {
           >
             <h4 className="text-center mb-0">Haz una pregunta</h4>
           </FormPregunta>
-        : <h4 className="text-center mb-0">Inicia sesión para preguntar algo</h4>
+        : <h4 className="text-center mb-3">Inicia sesión para preguntar algo</h4>
       }
       {
         noPreguntas ?
@@ -96,7 +89,7 @@ const FormPregunta = (props) => {
   const { preguntas, actualizarPreguntas, cursoID } = props
   const { user, token } = useContext(AuthContext)
   const [contenido, setContentido] = useState("")
-  const [enviando, setEnviando] = useState("")
+  const [enviando, setEnviando] = useState(false)
   const handleInput = e => {
     setContentido(e.target.value)
   }
@@ -153,6 +146,7 @@ const FormPregunta = (props) => {
             id="pregunta-contenido"
             rows="3"
             onChange={handleInput}
+            value={contenido}
             required
           ></textarea>
         </div>
@@ -164,6 +158,157 @@ const FormPregunta = (props) => {
           >{enviando ? "Enviando..." : "Enviar pregunta"}</button>
         </div>
       </form>
+    </>
+  )
+}
+
+const Comentario = ({ pregunta, delUsuario, esRespuesta }) => {
+  const { user } = useContext(AuthContext)
+  const [dataRespuestas, setDataRespuestas] = useState(pregunta.respuestas)
+  const [respuestas, setRespuestas] = useState(null)
+  const [verRespuestas, setVerRespuestas] = useState(false)
+
+  useEffect(() => {
+    if (dataRespuestas && dataRespuestas.length) {
+      const totalRespuestas = dataRespuestas.map(respuesta => {
+        const delUsuario = respuesta.autor === user.id
+        return (
+          <Comentario
+            pregunta={respuesta}
+            key={respuesta.id}
+            esRespuesta={true}
+            delUsuario={delUsuario}
+          />
+        )
+      })
+      setRespuestas(totalRespuestas)
+    }
+  }, [dataRespuestas])
+
+  const handleNuevaRespuesta = r => {
+    setDataRespuestas(dataRespuestas.concat(r))
+  }
+  const toggleRespuestas = e => {
+    setVerRespuestas(!verRespuestas)
+  }
+  return (
+    <div className={"d-flex flex-column ".concat(!esRespuesta ? "mb-3" : "")}>
+      <div className="d-flex align-items-center mb-1">
+        {
+          delUsuario &&
+          <span className="me-1"><strong>Tú:</strong></span>
+        }
+        <p className="border rounded-3 py-3 px-2 mb-0">
+          {pregunta.contenido}
+        </p>
+      </div>
+      {
+        !esRespuesta ?
+          (dataRespuestas.length > 0) ?
+            <div className="ms-2">
+              <button className="btn btn-link mb-1" onClick={toggleRespuestas}>
+                {dataRespuestas.length}
+                {dataRespuestas.length === 1 ? " respuesta" : " respuestas"}
+              </button>
+            </div>
+          : <span>0 respuestas</span>
+        : null
+      }
+      {
+        verRespuestas &&
+        <div className="ms-2 ms-md-4">
+          {respuestas}
+        </div>
+      }
+      {
+        (user && !esRespuesta) &&
+        <FormRespuesta
+          agregarRespuesta={handleNuevaRespuesta}
+          idPregunta={pregunta.id}
+        />
+      }
+    </div>
+  )
+}
+
+const FormRespuesta = ({ idPregunta, agregarRespuesta }) => {
+  const { addToast } = useToasts()
+  const { user, token } = useContext(AuthContext)
+  const [mostrarForm, setMostrarForm] = useState(false)
+  const [contenido, setContentido] = useState("")
+  const [enviando, setEnviando] = useState(false)
+  const handleInput = e => {
+    setContentido(e.target.value)
+  }
+  const handleSubmit = async e => {
+    e.preventDefault()
+    if (!contenido) {
+      return
+    }
+    const url = `${STRAPI}/masterclass/respuesta/${idPregunta}`
+    const options = {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        contenido
+      })
+    }
+    setEnviando(true)
+    try {
+      const res = await fetch(url, options)
+      if (!res.ok) {
+        throw await res.json()
+      }
+      const { id } = await res.json()
+      addToast("La respuesta ha sido enviada", {appearance: "success"})
+      // Actualizar lista de respuestas para incluir la nueva.
+      const nuevaRespuesta = {
+        id,
+        autor: user.id,
+        contenido
+      }
+      agregarRespuesta(nuevaRespuesta)
+      setContentido("")
+      setMostrarForm(false)
+    } catch(err) {
+      console.log(err)
+      addToast("No se pudo enviar la respuesta", {appearance: "error"})
+    } finally {
+      setEnviando(false)
+    }
+  }
+  return (
+    <>
+      {
+        !mostrarForm ?
+          <button className="btn btn-light" onClick={() => setMostrarForm(true)}>Responder</button>
+        : (
+          <form onSubmit={handleSubmit}>
+            <textarea
+              className="form-control mb-1"
+              id="pregunta-contenido"
+              rows="3"
+              onChange={handleInput}
+              value={contenido}
+              required
+            ></textarea>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={enviando ? "disabled" : undefined}
+            >{enviando ? "Enviando..." : "Responder"}</button>
+            <button
+              type="button"
+              className="btn btn-secondary ms-2"
+              disabled={enviando ? "disabled" : undefined}
+              onClick={() => setMostrarForm(false)}
+            >Cancelar</button>
+          </form>
+        )
+      }
     </>
   )
 }
