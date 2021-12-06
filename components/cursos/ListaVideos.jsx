@@ -62,11 +62,11 @@ export const ListaVideos = (props) => {
 
 export const ListaVideosRep = (props) => {
   const {
-      data,
-      changeVideo,
-      currentVideo,
-      cursoID,
-      clasesCompletadas
+    data,
+    changeVideo,
+    currentVideo,
+    cursoID,
+    clasesCompletadas
   } = props
   const { token } = useContext(AuthContext)
   return (
@@ -80,6 +80,9 @@ export const ListaVideosRep = (props) => {
             classCurrent = "bg-dark text-light"
           }
           const handleClick = () => {
+            if (!token) {
+              return
+            }
             if (isCurrent) {
               return
             }
@@ -87,6 +90,9 @@ export const ListaVideosRep = (props) => {
           }
           const marcarVisto = async e => {
             e.stopPropagation()
+            if (!token) {
+              return
+            }
             const url = `${STRAPI}/masterclass/usuario-curso/marcar-visto?curso-id=${cursoID}&video-id=${v.id}`
             const options = {
               method: "PUT",
