@@ -24,7 +24,6 @@ const Ejercicio = ({ contenido, enSeccion, irSolucion }) => {
     slug,
     precio,
     titulo,
-    categoria,
     descripcion,
     arbolCategorias,
     descripcion_corta,
