@@ -5,6 +5,7 @@ import formatDuration from "format-duration"
 import BotonAgregarCarrito from "./BotonAgregarCarrito"
 import { MetadataCurso } from "./cursos/PaginaCurso"
 import { useCurso, useCursoComprado } from "../hooks/articulo"
+import styles from "../styles/ListaCurso.module.scss"
 
 export const ListaCursosCarrusel = (props) => {
   const { categoria, cursos } = props
@@ -43,6 +44,7 @@ export const ListaCursosCards = (props) => {
           key={c.slug}
           data={c}
           categoria={categoria}
+          small={true}
         />
       </div>
     )
@@ -55,12 +57,12 @@ export const ListaCursosCards = (props) => {
 }
 
 export const ResumenCurso = (props) => {
-  const { data, categoria } = props
+  const { data, categoria, small } = props
   const { datosCursoUsuario, loadingCurso } = useCurso(data.id)
   const cursoComprado = useCursoComprado(data.id)
   const url = `/${categoria}/cursos/${data.slug}`
   return (
-    <div className="card">
+    <div className={"card ".concat(small ? styles.carta : "")}>
       <img className="card-img-top" alt="thumbnail" src={data.thumbnail.formats.thumbnail.url} />
       <div className="card-body">
         <h5 className="card-title">
@@ -77,8 +79,10 @@ export const ResumenCurso = (props) => {
         {
           !cursoComprado && <strong className="d-block">${data.precio}</strong>
         }
-        <div className="d-flex">
-          <a className="btn btn-outline-primary me-2" href={url}>Ver curso</a>
+        <div className={"d-flex align-items-center ".concat(styles.botones)}>
+          <Link href={url}>
+            <a className="btn btn-outline-primary me-2">Ver curso</a>
+          </Link>
           {
             cursoComprado ?
               <Link href={url.concat("/ver")}>

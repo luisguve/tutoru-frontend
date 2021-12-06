@@ -1,0 +1,14 @@
+.carta .botones {
+  @media screen and (min-width: 541px) {
+    a, button, p {
+      width: 50%;
+    }
+  }
+}
+.botones {
+  @media screen and (max-width: 540px) {
+    a, button, p {
+      width: 50%;
+    }
+  }
+}
