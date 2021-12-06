@@ -5,6 +5,8 @@ import EstructuraPagina from "../EstructuraPagina"
 import Subcategorias from "./Subcategorias"
 import PaginaCategoria from "./PaginaCategoria"
 import Ejercicio from "./Ejercicio"
+import PaginaCurso from "../cursos/PaginaCurso"
+import PaginaCursoRep from "../cursos/PaginaCursoRep"
 
 /**
 * Componente compartido entre las diferentes categorias y paginas de ejercicios.
@@ -28,14 +30,15 @@ export default function Categoria({props}) {
   if (esCategoria) {
     componente = 
     <PaginaCategoria
+      idCategoria={indice.Titulo_url}
       titulo={indice.Titulo_normal}
       subcategorias={indice.hijos}
       resumen={contenido.resumen}
     />
   } else if (esReproduccionCurso) {
-    componente = <PaginaReproduccionCurso />
+    componente = <PaginaCursoRep resumen={contenido.resumen} />
   } else if (esPresentacionCurso) {
-    componente = <PaginaPresentacionCurso />
+    componente = <PaginaCurso resumen={contenido.resumen} />
   } else {
     componente =
     <Ejercicio
@@ -45,19 +48,11 @@ export default function Categoria({props}) {
   }
 
   return (
-    <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb} titulo={titulo} header={indice.Titulo_normal}>
+    <EstructuraPagina navItems={navItems} breadCrumb={breadCrumb} titulo={titulo} header={indice.Titulo_normal} esReproduccionCurso={esReproduccionCurso}>
       <Head>
         <title>{titulo} | {metaSubtitulo}</title>
       </Head>
       {componente}
     </EstructuraPagina>
   )
-}
-
-const PaginaReproduccionCurso = () => {
-  return <h1>ver curso</h1>
-}
-
-const PaginaPresentacionCurso = () => {
-  return <h1>pres de curso</h1>
 }

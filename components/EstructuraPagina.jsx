@@ -16,7 +16,14 @@ export default function EstructuraPagina(props) {
     titulo,
     subtitulo,
     header,
+    esReproduccionCurso
   } = props
+  let containerClassname = styles.container
+  if (esReproduccionCurso) {
+    containerClassname += ` ${styles["container-rep"]}`
+  } else {
+    containerClassname += " px-2"
+  }
   return (
     <div className="min-vh-100 d-flex flex-column justify-content-between">
       <div className="contenido">
@@ -30,9 +37,9 @@ export default function EstructuraPagina(props) {
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
         <Header isHome={isHome} navItems={navItems} titulo={titulo} header={header} subtitulo={subtitulo} />
-        <div className="container-lg">
+        <div className="container-lg px-0 px-md-2">
           <Breadcrumb isHome={isHome} elements={breadCrumb} />
-          <main className={styles.container}>
+          <main className={containerClassname}>
             {children}
           </main>
         </div>
@@ -67,7 +74,7 @@ const Breadcrumb = ({elements, isHome}) => {
   }
   if (!isHome) {
     return (
-      <div className="mt-3 mt-md-5">
+      <div className="mt-3 mt-md-5 px-2 px-md-0">
         <Link href="/">
           <a>← Inicio</a>
         </Link>

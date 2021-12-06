@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import Link from "next/link"
+import Image from "next/image"
 
 import EstructuraPagina from '../components/EstructuraPagina'
 import ListaEjercicios from '../components/categorias/ListaEjercicios'
+import { ListaCursosCarrusel } from "../components/ListaCursos"
 import utilStyles from '../styles/utils.module.css'
 import { getCategorias } from "../lib/contenidos"
 import { cargarInformacionSitio, cargarNavItems, covers } from "../lib/metadata"
@@ -32,28 +34,43 @@ export default function Home(props) {
     } = datos
 
     const thumbnailClass = ejercicios.planteamientos.length ? "float-start" : "d-flex justify-content-center"
+    let titulo = Titulo_normal
+    if (ejercicios.q > 0) {
+      const label = ejercicios.q > 1 ? "ejercicios" : "ejercicio"
+      titulo += `: ${ejercicios.q} ${label}`
+    }
+    if (cursos.length > 0) {
+      const label = cursos.length > 1 ? "cursos" : "curso"
+      if (ejercicios.q > 0) {
+        titulo += `, ${cursos.length} ${label}`
+      } else {
+        titulo += `: ${cursos.length} ${label}`
+      }
+    }
 
     return (
-      <li className="mb-2 clearfix" key={Titulo_url}>
-        <Link href={`/${Titulo_url}`}>
-          <a>
-            <h3 className="text-center">{Titulo_normal} ({ejercicios.q} ejercicios)</h3>
-          </a>
-        </Link>
-        <div className={thumbnailClass.concat(" me-1")}>
+      <li className="mb-5" key={Titulo_url}>
+        <div className="clearfix">
           <Link href={`/${Titulo_url}`}>
             <a>
-              <img src={covers[Titulo_url]} alt={`Portada ${Titulo_normal}`} />
+              <h3 className="text-center">{titulo}</h3>
             </a>
           </Link>
+          <div className={thumbnailClass.concat(" me-1")}>
+            <Link href={`/${Titulo_url}`}>
+              <a>
+                <img src={covers[Titulo_url]} alt={`Portada ${Titulo_normal}`} />
+              </a>
+            </Link>
+          </div>
+          {
+            (ejercicios.planteamientos.length > 0) && 
+            <ListaEjercicios irSolucion={false} muestras={ejercicios.planteamientos} />
+          }
         </div>
         {
-          (ejercicios.planteamientos.length > 0) && 
-          <ListaEjercicios irSolucion={false} muestras={ejercicios.planteamientos} />
-        }
-        {
           (cursos.length > 0) &&
-          <CarruselCursos categoria={Titulo_url} cursos={cursos} />
+          <ListaCursosCarrusel categoria={Titulo_url} cursos={cursos} />
         }
       </li>
     )
@@ -81,16 +98,4 @@ export default function Home(props) {
       </section>
     </EstructuraPagina>
   )
-}
-
-const CarruselCursos = ({categoria, cursos}) => {
-  return cursos.map(c => {
-    return (
-      <div key={c.slug}>
-        <Link href={`/${categoria}/cursos/${c.slug}`}>
-          <a>{c.titulo}</a>
-        </Link>
-      </div>
-    )
-  })
 }
