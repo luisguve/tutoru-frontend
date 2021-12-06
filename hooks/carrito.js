@@ -11,7 +11,7 @@ export const useInformacion = () => {
     const total = articulos.reduce((suma, articulo) => suma + articulo.precio, 0)
     setInformacion({
       articulos,
-      total
+      total: total.toFixed(2)
     })
   }, [articulos])
 
