@@ -5,7 +5,7 @@ import { useToasts } from "react-toast-notifications"
 
 import ArticulosContext from "../../context/ArticulosContext"
 import AuthContext from "../../context/AuthContext"
-import { useCurso } from "../../hooks/articulo"
+import { useCursoComprado } from "../../hooks/articulo"
 import { STRAPI } from "../../lib/urls"
 import Aliplayer from "../../components/Aliplayer"
 import { ListaVideosRep } from "./ListaVideos"
@@ -18,7 +18,8 @@ const PaginaCursoRep = (props) => {
   const router = useRouter()
   const { id, videos, titulo } = props.resumen
   const { IDsCursos, loadingIDsArticulos } = useContext(ArticulosContext)
-  const { token } = useContext(AuthContext)
+  const cursoComprado = useCursoComprado(id)
+  const { token, loadingUser } = useContext(AuthContext)
   const fetchDataRep = async (videoId) => {
     setLoading(true)
     let url = ""
@@ -51,10 +52,15 @@ const PaginaCursoRep = (props) => {
     }
   }
   useEffect(async () => {
-    if (token && !loadingIDsArticulos && !dataRep) {
+    const sinAcceso = (!token && !loadingUser) && (!loadingIDsArticulos && !cursoComprado)
+    if (sinAcceso) {
+      router.push(router.asPath.replace("/ver", ""))
+      return
+    }
+    if (cursoComprado && !dataRep) {
       fetchDataRep()
     }
-  }, [loadingIDsArticulos, token])
+  }, [loadingIDsArticulos, cursoComprado, token, loadingUser])
   return (
     <div>
      <Head>
