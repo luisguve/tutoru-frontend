@@ -13,7 +13,7 @@ export default function Carrito() {
     setClass(className)
   }
   return (
-    <button className={styles.Icono} onClick={irPaso1}>
+    <button className={styles.Icono.concat(" btn btn-outline-success")} onClick={irPaso1}>
       Ver carrito {
         (informacion && informacion.articulos.length) ? `(${informacion.articulos.length})`: null
       }
