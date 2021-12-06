@@ -7,7 +7,7 @@ import ListaEjercicios from '../components/categorias/ListaEjercicios'
 import { ListaCursosCarrusel } from "../components/ListaCursos"
 import utilStyles from '../styles/utils.module.css'
 import { getCategorias } from "../lib/contenidos"
-import { cargarInformacionSitio, cargarNavItems, covers } from "../lib/metadata"
+import { cargarInformacionSitio, cargarNavItems } from "../lib/metadata"
 
 export async function getStaticProps() {
   const portadas = await getCategorias()
@@ -30,10 +30,11 @@ export default function Home(props) {
       Titulo_url,
       Titulo_normal,
       ejercicios,
+      thumbnail,
       cursos
     } = datos
 
-    const thumbnailClass = ejercicios.planteamientos.length ? "float-start" : "d-flex justify-content-center"
+    const thumbnailClass = "float-md-start d-flex justify-content-center"
     let titulo = Titulo_normal
     if (ejercicios.q > 0) {
       const label = ejercicios.q > 1 ? "ejercicios" : "ejercicio"
@@ -56,10 +57,14 @@ export default function Home(props) {
               <h3 className="text-center">{titulo}</h3>
             </a>
           </Link>
-          <div className={thumbnailClass.concat(" me-1")}>
+          <div className={thumbnailClass.concat(" me-md-1")}>
             <Link href={`/${Titulo_url}`}>
               <a>
-                <img src={covers[Titulo_url]} alt={`Portada ${Titulo_normal}`} />
+                <img
+                  className="img img-fluid"
+                  src={thumbnail}
+                  alt={`Portada ${Titulo_normal}`}
+                />
               </a>
             </Link>
           </div>
