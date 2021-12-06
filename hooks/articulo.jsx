@@ -92,10 +92,7 @@ datosCursoUsuario:
       "contenido": "Pregunta acerca de este curso",
       "curso": 1,
       "autor": 3,
-      "created_by": 1,
-      "updated_by": 1,
-      "created_at": "2021-12-01T13:36:31.917Z",
-      "updated_at": "2021-12-01T13:36:31.966Z"
+      "respuestas": []
     }
   ]
 }*/
