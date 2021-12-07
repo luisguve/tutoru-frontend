@@ -50,16 +50,21 @@ export default function Pago({navItems, informacionSitio}) {
         <Head>
           <title>Confirmación de compra</title>
         </Head>
-        <h1>
+        <>
           {
             !confirmante ?
-              "Confirmante invalido"
+              <h1>Confirmante invalido</h1>
             :
-              loadingOrder ? "Confirmando pago..."
+              loadingOrder ? <h1>Confirmando pago...</h1>
               :
-              order ? "¡Compra exitosa!" : "El pago no pudo ser confirmado"
+              order ? <h1>¡Compra exitosa!</h1> : (
+                <div>
+                  <h1>El pago no pudo ser confirmado</h1>
+                  <p>ID de pago: {confirmante}</p>
+                </div>
+              )
           }
-        </h1>
+        </>
         { order &&
           <>
             <h4 className="mt-5 mb-2">Resumen de la compra</h4>
@@ -81,7 +86,7 @@ export default function Pago({navItems, informacionSitio}) {
                 </tr>
               </tbody>
             </table>
-            <p>Puedes ver las soluciones de los ejercicios que has comprado en <Link href="/cuenta"><a>tu cuenta</a></Link></p>
+            <p>Puedes ver un resumen de los artículos que has comprado en <Link href="/cuenta"><a>tu cuenta</a></Link></p>
           </>
         }
       </div>
