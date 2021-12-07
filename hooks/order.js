@@ -13,7 +13,7 @@ import { STRAPI } from "../lib/urls"
 */
 export const useOrder = (confirmante) => {
   const [order, setOrder] = useState(null)
-  const [loadingOrder, setLoading] = useState(false)
+  const [loadingOrder, setLoading] = useState(true)
 
   const { token } = useContext(AuthContext)
   const { addToast } = useToasts()
@@ -25,7 +25,7 @@ export const useOrder = (confirmante) => {
           setLoading(true)
           addToast("Confirmando pago", {appearance: "info"})
           const orderUrl = `${STRAPI}/orders/confirm`
-          const order_res = await fetch(orderUrl, {
+          const options = {
             method: "POST",
             headers: {
               "Authorization": `Bearer ${token}`,
@@ -34,8 +34,12 @@ export const useOrder = (confirmante) => {
             body: JSON.stringify({
               checkout_session: confirmante
             })
-          })
+          }
+          const order_res = await fetch(orderUrl, options)
           const data = await order_res.json()
+          if (!order_res.ok) {
+            throw data
+          }
           addToast("¡Pago confirmado!", {appearance: "success"})
           limpiarSesion()
           setOrder(data)
