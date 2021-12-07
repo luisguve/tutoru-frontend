@@ -204,7 +204,7 @@ const Comentario = ({ pregunta, delUsuario, esRespuesta }) => {
       </div>
       {
         !esRespuesta ?
-          (dataRespuestas.length > 0) ?
+          (dataRespuestas && dataRespuestas.length > 0) ?
             <div className="ms-2">
               <button className="btn btn-link mb-1" onClick={toggleRespuestas}>
                 {dataRespuestas.length}
