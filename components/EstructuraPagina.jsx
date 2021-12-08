@@ -43,7 +43,7 @@ export default function EstructuraPagina(props) {
           <meta property="og:url" content={"https://tutoruniversitario.netlify.app".concat(router.asPath)} />
           <meta property="og:type" content="website" />
           <meta property="og:image" content="https://tutoruniversitario.netlify.app/img/banner_principal.jpg" />
-          <meta property="twitter:card" content="https://tutoruniversitario.netlify.app/img/banner_principal.jpg" />
+          <meta property="og:image" content="https://tutoruniversitario.netlify.app/img/banner_principal.jpg" />
         </Head>
         <Header isHome={isHome} navItems={navItems} titulo={titulo} header={header} subtitulo={subtitulo} />
         <div className="container-lg px-0 px-md-2">
