@@ -73,7 +73,7 @@ const SelectorTabs = ({tabActual, changeTab}) => {
         tabIDs.map(t => {
           return (
             <button
-              className={"btn me-1 mb-1 mb-sm-0".concat(t.id === tabActual ? "btn-dark" : "btn-light")}
+              className={"btn me-1 mb-1 mb-sm-0 ".concat(t.id === tabActual ? "btn-dark" : "btn-light")}
               key={t.id}
               onClick={() => {changeTab(t.id)}}
             >{t.label}</button>
