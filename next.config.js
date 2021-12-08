@@ -5,4 +5,5 @@ module.exports = withPlugins([[optimizedImages]],{
   future: {
     webpack5: true,
   },
+  generateBuildId: () => 'build'
 })
