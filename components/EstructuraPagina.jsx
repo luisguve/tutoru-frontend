@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import styles from '../styles/Estructura.module.css'
@@ -18,6 +18,7 @@ export default function EstructuraPagina(props) {
     header,
     esReproduccionCurso
   } = props
+  const router = useRouter()
   let containerClassname = styles.container
   if (esReproduccionCurso) {
     containerClassname += ` ${styles["container-rep"]}`
@@ -31,10 +32,18 @@ export default function EstructuraPagina(props) {
           <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
-            content="Learn how to build a personal website using Next.js"
+            content="Plataforma de cursos en línea de matemáticas"
           />
-          <meta name="og:title" content={header} />
-          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            property="og:description"
+            content="Plataforma de cursos en línea de matemáticas"
+          />
+          <meta property="og:locale" content="es_VE" />
+          <meta property="og:title" content={header} />
+          <meta property="og:url" content={"https://tutoruniversitario.netlify.app".concat(router.asPath)} />
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content="https://tutoruniversitario.netlify.app/banner_principal.jpg" />
+          <meta name="twitter:card" content="https://tutoruniversitario.netlify.app/banner_principal.jpg" />
         </Head>
         <Header isHome={isHome} navItems={navItems} titulo={titulo} header={header} subtitulo={subtitulo} />
         <div className="container-lg px-0 px-md-2">
