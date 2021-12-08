@@ -44,6 +44,15 @@ export default function EstructuraPagina(props) {
           <meta property="og:type" content="website" />
           <meta property="og:image" content="https://tutoruniversitario.netlify.app/banner_principal.jpg" />
           <meta name="twitter:card" content="https://tutoruniversitario.netlify.app/banner_principal.jpg" />
+          {/* Google analytics */}
+          <script async src="https://www.googletagmanager.com/gtag/js?id=G-NF3524CZFH"></script>
+          <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-NF3524CZFH');
+          </script>
         </Head>
         <Header isHome={isHome} navItems={navItems} titulo={titulo} header={header} subtitulo={subtitulo} />
         <div className="container-lg px-0 px-md-2">
