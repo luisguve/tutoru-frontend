@@ -82,6 +82,7 @@ export default function Home(props) {
   })
   return (
     <EstructuraPagina
+      header="Tutor Universitario"
       isHome={true}
       navItems={navItems}
       titulo={informacionSitio.Titulo_sitio}
