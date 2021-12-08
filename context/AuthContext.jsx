@@ -25,7 +25,8 @@ export const AuthProvider = props => {
   const logoutUser = async () => {
     limpiarToken()
     limpiarSesion()
-    addToast("Cerraste sesión", { appearance: 'info' })
+    console.log("Cerraste sesion")
+    // addToast("Cerraste sesión", { appearance: 'info' })
     setToken(null)
     setUser(null)
   }

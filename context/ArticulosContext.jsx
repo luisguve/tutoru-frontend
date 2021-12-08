@@ -18,12 +18,14 @@ export function ArticulosProvider({children}) {
     if (IDs) {
       setIDsArticulos(IDs)
       if (!IDs || (!IDs.ejercicios.length && !IDs.cursos.length)) {
-        addToast("Ningún articulo comprado", { appearance: 'info' })
+        console.log("Ningún articulo comprado")
+        // addToast("Ningún articulo comprado", { appearance: 'info' })
       }
     }
     // Proceder a pedir los IDs de articulos comprados
     try {
-      addToast("Obteniendo IDs de articulos comprados", { appearance: 'info' })
+      console.log("Obteniendo IDs de articulos comprados")
+      // addToast("Obteniendo IDs de articulos comprados", { appearance: 'info' })
       setLoading(true)
 
       const articulosUrl = `${STRAPI}/user-data/comprados-ids`
@@ -38,7 +40,8 @@ export function ArticulosProvider({children}) {
         (!articulos.ejercicios || !articulos.ejercicios.length) &&
         (!articulos.cursos || !articulos.cursos.length)
       ) {
-        addToast("Ningun articulo comprado", { appearance: 'info' })
+        console.log("Ningun articulo comprado")
+        // addToast("Ningun articulo comprado", { appearance: 'info' })
       } else {
         let texto = `${articulos.ejercicios.length} ejercicios comprados`
         if (articulos.ejercicios.length === 1) {
@@ -52,7 +55,8 @@ export function ArticulosProvider({children}) {
           default:
           texto += ` y ${articulos.cursos.length} cursos comprados`
         }
-        addToast(texto, { appearance: 'info' })
+        console.log(texto)
+        // addToast(texto, { appearance: 'info' })
       }
       // Agregar un prefijo a los IDs de los cursos
       articulos.cursos = articulos.cursos.map(ID => "curso--" + ID)
@@ -60,8 +64,9 @@ export function ArticulosProvider({children}) {
       setIDsArticulos(articulos)
       guardarSesion(articulos)
     } catch (err) {
+      console.log("No se pudieron obtener los IDs de los articulos comprados")
       console.log(err)
-      addToast("No se pudieron obtener los IDs de los articulos comprados", { appearance: 'error' })
+      // addToast("No se pudieron obtener los IDs de los articulos comprados", { appearance: 'error' })
     }
     setLoading(false)
   }

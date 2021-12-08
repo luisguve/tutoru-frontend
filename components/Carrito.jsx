@@ -188,8 +188,11 @@ const Checkout = props => {
 
       addToast("Creando orden de compra", { appearance: "info" })
       const res = await fetch(orderUrl, orderOptions)
-      const { id } = await res.json()
-
+      const data = await res.json()
+      if (!res.ok) {
+        throw data
+      }
+      const { id } = data
       if (id) {
         addToast("Redireccionando a stripe", { appearance: "success" })
         limpiarCarrito()

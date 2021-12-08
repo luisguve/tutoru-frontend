@@ -24,7 +24,8 @@ export const useSolucion = (id, enSeccion, irSolucion) => {
     const fetchSolucion = async (id, token) => {
       setLoadingSolucion(true)
       try {
-        addToast("Obteniendo solucion", { appearance: "info" })
+        console.log("Obteniendo solucion")
+        // addToast("Obteniendo solucion", { appearance: "info" })
         const solucionUrl = `${STRAPI}/solucion/${id}`
         const solucion_res = await fetch(solucionUrl, {
           headers: {
@@ -115,7 +116,8 @@ export const useCurso = id => {
     const fetchCurso = async (id, token) => {
       setLoadingCurso(true)
       try {
-        addToast("Obteniendo informacion de curso", { appearance: "info" })
+        console.log("Obteniendo informacion de curso")
+        // addToast("Obteniendo informacion de curso", { appearance: "info" })
         const cursoUrl = `${STRAPI}/masterclass/usuario-curso/${id}`
         const options = {}
         if (token) {
