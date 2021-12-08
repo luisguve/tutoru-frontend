@@ -68,12 +68,12 @@ const SelectorTabs = ({tabActual, changeTab}) => {
     {id: "lista-videos", label: "Lista de reproducción"}
   ]
   return (
-    <div>
+    <div className="d-flex d-sm-block flex-wrap justify-content-center">
       {
         tabIDs.map(t => {
           return (
             <button
-              className={"btn me-1 ".concat(t.id === tabActual ? "btn-dark" : "btn-light")}
+              className={"btn me-1 mb-1 mb-sm-0".concat(t.id === tabActual ? "btn-dark" : "btn-light")}
               key={t.id}
               onClick={() => {changeTab(t.id)}}
             >{t.label}</button>

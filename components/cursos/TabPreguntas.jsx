@@ -75,7 +75,7 @@ const TabPreguntas = ({data, cursoID}) => {
       }
       {
         noPreguntas ?
-          <p>Todavía no hay preguntas</p>
+          <p className="fw-bold">Todavía no hay preguntas</p>
         : <>{preguntasUsuario}{preguntas}</>
       }
     </div>
