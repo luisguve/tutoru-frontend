@@ -48,7 +48,7 @@ export default function EstructuraPagina(props) {
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-NF3524CZFH"></script>
           <script>
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
+            function gtag(){dataLayer.push(arguments)}
             gtag('js', new Date());
 
             gtag('config', 'G-NF3524CZFH');
