@@ -42,8 +42,8 @@ export default function EstructuraPagina(props) {
           <meta property="og:title" content={header} />
           <meta property="og:url" content={"https://tutoruniversitario.netlify.app".concat(router.asPath)} />
           <meta property="og:type" content="website" />
-          <meta property="og:image" content="https://tutoruniversitario.netlify.app/banner_principal.jpg" />
-          <meta name="twitter:card" content="https://tutoruniversitario.netlify.app/banner_principal.jpg" />
+          <meta property="og:image" content="https://tutoruniversitario.netlify.app/img/banner_principal.jpg" />
+          <meta property="twitter:card" content="https://tutoruniversitario.netlify.app/img/banner_principal.jpg" />
           {/* Google analytics */}
           <script async src="https://www.googletagmanager.com/gtag/js?id=G-NF3524CZFH"></script>
           <script>
