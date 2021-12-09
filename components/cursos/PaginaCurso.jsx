@@ -89,7 +89,7 @@ const PaginaCurso = (props) => {
 
 export default PaginaCurso
 
-export const MetadataCurso = ({data}) => {
+export const MetadataCurso = ({data, center}) => {
   const {
     estudiantes,
     reviews,
@@ -98,7 +98,7 @@ export const MetadataCurso = ({data}) => {
   } = data
   return (
     <div>
-      <p className="mb-1">
+      <div className={"mb-1".concat(center ? " d-flex flex-column align-items-center" : "")}>
         <ReactStars
           activeColor="#ffd700"
           value={rating}
@@ -113,7 +113,7 @@ export const MetadataCurso = ({data}) => {
             : `${rating}/5 según ${reviews.length} estudiantes`
           : `0 reseñas`
         }
-      </p>
+      </div>
       <p className="mb-1">
         {
           estudiantes === 1 ?

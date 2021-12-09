@@ -42,12 +42,12 @@ export default function BotonComprar({ articulo }) {
   return (
     agregado ?
       <button
-        className="btn btn-success"
+        className="btn btn-sm btn-success"
         onClick={handleQuitarCarrito}
       >Quitar del carrito</button>
       :
       <button
-        className="btn btn-success"
+        className="btn btn-sm btn-success"
         onClick={handleAgregarCarrito}
       >Agregar al carrito</button>
   )

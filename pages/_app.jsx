@@ -5,9 +5,6 @@ import { ToastProvider } from 'react-toast-notifications'
 import '../styles/global.scss'
 import 'bootstrap/dist/css/bootstrap.css'
 
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-
 import { AuthProvider } from "../context/AuthContext"
 import { ArticulosProvider } from "../context/ArticulosContext"
 import { CarritoProvider } from "../context/CarritoContext"

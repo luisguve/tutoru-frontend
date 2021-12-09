@@ -26,12 +26,10 @@
     "react-dom": "17.0.1",
     "react-rating-stars-component": "^2.2.0",
     "react-responsive-carousel": "^3.2.22",
-    "react-slick": "^0.28.1",
     "react-toast-notifications": "^2.5.1",
     "remark": "^13.0.0",
     "remark-html": "^13.0.1",
-    "sass": "^1.37.5",
-    "slick-carousel": "^1.8.1"
+    "sass": "^1.37.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",
