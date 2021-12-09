@@ -32,11 +32,11 @@ export default function EstructuraPagina(props) {
           <link rel="icon" href="/favicon.ico" />
           <meta
             name="description"
-            content="Plataforma de cursos en línea de matemáticas"
+            content="Plataforma de cursos en línea de matemáticas, física y química"
           />
           <meta
             property="og:description"
-            content="Plataforma de cursos en línea de matemáticas"
+            content="Plataforma de cursos en línea de matemáticas, física y química"
           />
           <meta property="og:locale" content="es_VE" />
           <meta property="og:title" content={header} />
