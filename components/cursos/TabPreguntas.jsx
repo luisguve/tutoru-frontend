@@ -171,7 +171,7 @@ const Comentario = ({ pregunta, delUsuario, esRespuesta }) => {
   useEffect(() => {
     if (dataRespuestas && dataRespuestas.length) {
       const totalRespuestas = dataRespuestas.map(respuesta => {
-        const delUsuario = respuesta.autor === user.id
+        const delUsuario = user ? respuesta.autor === user.id : false
         return (
           <Comentario
             pregunta={respuesta}
